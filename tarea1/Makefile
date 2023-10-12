@@ -1,20 +1,23 @@
-# Makefile for RTree project
+SHELL := /bin/bash
 
 # Variables
 BUILD_DIR = build
+RTREE_EXE = RTree
 
 # Targets
-.PHONY: all clean run
+.PHONY: build clear
 
-all: $(BUILD_DIR)/RTree
 
-$(BUILD_DIR)/RTree: CMakeLists.txt src/main.cpp src/rtree/rtree.cpp include/rtree/rtree.hpp
-    mkdir -p $(BUILD_DIR)
-    cd $(BUILD_DIR) && cmake .. && make
+build:
+	@echo "Building..."
+	@mkdir -p $(BUILD_DIR)
+	@cmake -S . -B $(BUILD_DIR)
+	@make -C $(BUILD_DIR)
 
-clean:
-    rm -rf $(BUILD_DIR)
+clear:
+	@echo "Cleaning..."
+	@rm -rf $(BUILD_DIR)
 
-run: $(BUILD_DIR)/RTree
-    cd $(BUILD_DIR) && ./RTree
-	
+run:
+	@echo "Running..."
+	@./$(BUILD_DIR)/$(RTREE_EXE)
