@@ -7,6 +7,9 @@ RTREE_EXE = RTree
 # Targets
 .PHONY: build clear
 
+# makeflags
+MAKEFLAGS += --no-print-directory
+
 
 build:
 	@echo "Building..."
