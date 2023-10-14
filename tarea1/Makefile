@@ -17,10 +17,21 @@ build:
 	@cmake -S . -B $(BUILD_DIR)
 	@make -C $(BUILD_DIR)
 
-clear:
-	@echo "Cleaning..."
-	@rm -rf $(BUILD_DIR)
 
 run:
 	@echo "Running..."
 	@./$(BUILD_DIR)/$(RTREE_EXE)
+
+
+clear:
+	@echo "Cleaning..."
+	@rm -rf $(BUILD_DIR)
+
+
+cache-usage:
+	@free -h | awk '/^Mem:/ {print $$6}'
+
+
+free-cache:
+	@echo "Freeing cache..."
+	@sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches"
