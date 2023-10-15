@@ -1,9 +1,17 @@
 #include "rtree/rtree.hpp"
+#include "rectangle/rectangle.hpp"
 #include <iostream>
 
 using namespace std;
 
-void RTree::sayHello()
-{
-    cout << "Hello from RTree!" << endl;
-}
+class RTree {
+  public:
+    void sayHello() {
+      cout << "Hello from RTree!" << endl;
+    }
+
+    
+    void insert(Rectangle r) {
+      
+    }
+};

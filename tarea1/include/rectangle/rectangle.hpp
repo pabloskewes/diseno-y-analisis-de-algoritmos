@@ -13,22 +13,20 @@ struct Point {
 };
 
 /**
- * @struct Rectangle
- * @brief A struct representing a rectangle with a bottom left and top right
- * point.
+ * @class Rectangle
+ * @brief A class representing a rectangle in a 2D plane.
  */
-struct Rectangle {
+class Rectangle {
+  public:
     Point bottom_left;
     Point top_right;
-};
 
-void print_rectangle(Rectangle rect);
-Point middle_point(Rectangle rect);
-double area(Rectangle rect);
-bool intersects(Rectangle rect1, Rectangle rect2);
-std::vector<Rectangle>
-generate_random_rectangles(long long num_rects, Point bottom_left_bound,
-                           Point top_right_bound, double min_side_length,
-                           double max_side_length, bool show_progress_bar);
+    Rectangle(Point bottom_left, Point top_right);
+
+    void print();
+    Point middle_point();
+    double area();
+    bool intersects(const Rectangle &other);
+};
 
 #endif // RECTANGLE_HPP

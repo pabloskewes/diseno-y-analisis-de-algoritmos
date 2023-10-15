@@ -7,50 +7,61 @@
 using namespace std;
 
 /**
- * Prints a rectangle to stdout.
- * @param rect The rectangle to print.
+ * @class Rectangle
+ * @brief A class representing a rectangle in a 2D plane.
  */
-void print_rectangle(Rectangle rect) {
-    cout << "Rectangle(bottom_left=(" << rect.bottom_left.x << ", "
-         << rect.bottom_left.y << "), top_right=(" << rect.top_right.x << ", "
-         << rect.top_right.y << "))" << endl;
-}
+class Rectangle {
+  public:
+    Point bottom_left;
+    Point top_right;
 
-/**
- * Calculates the middle point of a rectangle.
- * @param rect The rectangle to calculate the middle point from.
- * @return The middle point of the rectangle.
- */
-Point middle_point(Rectangle rect) {
-    Point middle;
-    middle.x = (rect.bottom_left.x + rect.top_right.x) / 2;
-    middle.y = (rect.bottom_left.y + rect.top_right.y) / 2;
-    return middle;
-}
+    Rectangle(Point bottom_left, Point top_right) {
+        this->bottom_left = bottom_left;
+        this->top_right = top_right;
+    }
 
-/**
- * Calculates the area of a rectangle.
- * @param rect The rectangle to calculate the area from.
- * @return The area of the rectangle.
- */
-double area(Rectangle rect) {
-    return (rect.top_right.x - rect.bottom_left.x) *
-           (rect.top_right.y - rect.bottom_left.y);
-}
+    /**
+     * Prints a rectangle to stdout.
+     */
+    void print() {
+        cout << "Rectangle(bottom_left=(" << this->bottom_left.x << ", "
+             << this->bottom_left.y << "), top_right=(" << this->top_right.x
+             << ", " << this->top_right.y << "))" << endl;
+    }
 
-/**
- * Indicates whether 2 rectangles have no non-zero area overlap.
- * @param rect1 The first rectangle.
- * @param rect2 The second rectangle.
- * @return True if the rectangles have no non-zero area overlap, false
- * otherwise.
- */
-bool intersects(Rectangle rect1, Rectangle rect2) {
-    return !(rect1.top_right.x < rect2.bottom_left.x ||
-             rect1.bottom_left.x > rect2.top_right.x ||
-             rect1.top_right.y < rect2.bottom_left.y ||
-             rect1.bottom_left.y > rect2.top_right.y);
-}
+    /**
+     * Calculates the middle point of a rectangle.
+     * @return The middle point of the rectangle.
+     */
+    Point middle_point() {
+        Point middle;
+        middle.x = (this->bottom_left.x + this->top_right.x) / 2;
+        middle.y = (this->bottom_left.y + this->top_right.y) / 2;
+        return middle;
+    }
+
+    /**
+     * Calculates the area of a rectangle.
+     * @return The area of the rectangle.
+     */
+    double area() {
+        return (this->top_right.x - this->bottom_left.x) *
+               (this->top_right.y - this->bottom_left.y);
+    }
+
+    /**
+     * Indicates whether 2 rectangles have no non-zero area overlap.
+     * @param other The rectangle to check for intersection with.
+     * @return True if the rectangles have no non-zero area overlap, false
+     * otherwise.
+     */
+    bool intersects(const Rectangle &other) {
+        return !(this->top_right.x < other.bottom_left.x ||
+                 this->bottom_left.x > other.top_right.x ||
+                 this->top_right.y < other.bottom_left.y ||
+                 this->bottom_left.y > other.top_right.y);
+    }
+};
 
 /**
  * Generates a random double between the specified bounds.
@@ -87,16 +98,18 @@ generate_random_rectangles(long long num_rects, Point bottom_left_bound,
     for (long long i = 0; i < num_rects; i++) {
         if (show_progress_bar)
             bar.update();
-        Rectangle rect;
-        rect.bottom_left.x = random_double(bottom_left_bound.x,
-                                           top_right_bound.x - max_side_length);
-        rect.bottom_left.y = random_double(bottom_left_bound.y,
-                                           top_right_bound.y - max_side_length);
-        rect.top_right.x = rect.bottom_left.x +
-                           random_double(min_side_length, max_side_length);
-        rect.top_right.y = rect.bottom_left.y +
-                           random_double(min_side_length, max_side_length);
-        rects.push_back(rect);
+
+        double bottom_left_x = random_double(
+            bottom_left_bound.x, top_right_bound.x - max_side_length);
+        double bottom_left_y = random_double(
+            bottom_left_bound.y, top_right_bound.y - max_side_length);
+        double top_right_x =
+            bottom_left_x + random_double(min_side_length, max_side_length);
+        double top_right_y =
+            bottom_left_y + random_double(min_side_length, max_side_length);
+        Rectangle r(Point{bottom_left_x, bottom_left_y},
+                    Point{top_right_x, top_right_y});
+        rects.push_back(r);
     }
     return rects;
 }
