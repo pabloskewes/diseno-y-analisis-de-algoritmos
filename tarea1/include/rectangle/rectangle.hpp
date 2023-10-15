@@ -24,10 +24,9 @@ struct Rectangle {
 
 Point middle_point(Rectangle rect);
 bool intersects(Rectangle rect1, Rectangle rect2);
-std::vector<Rectangle> generate_random_rectangles(int num_rects,
-                                             Point bottom_left_bound,
-                                             Point top_right_bound,
-                                             double min_side_length,
-                                             double max_side_length);
+std::vector<Rectangle>
+generate_random_rectangles(long long num_rects, Point bottom_left_bound,
+                           Point top_right_bound, double min_side_length,
+                           double max_side_length, bool show_progress_bar);
 
 #endif // RECTANGLE_HPP
