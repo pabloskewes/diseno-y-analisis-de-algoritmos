@@ -1,22 +1,24 @@
 #include "rectangle/rectangle.hpp"
-#include "rtree/rtree.hpp"
 #include "rectangle/test_rectangle.hpp"
+#include "rtree/rtree.hpp"
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <random>
 
-
-
-int main() {
+void optimize() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(NULL);
+}
 
-    RTree rtree;
-    rtree.sayHello();
+int main() {
+    optimize();
+
+    int M = 1000;
 
     // test_intersect();
-    // test_generate_random_rects();
-    test_generate_random_rects_massive(std::pow(2, 18));
+    test_generate_random_rects();
+    // test_generate_random_rects_massive(std::pow(2, 18));
 
     return 0;
 }

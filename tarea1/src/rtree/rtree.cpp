@@ -1,87 +1,60 @@
 #include "rtree/rtree.hpp"
 #include "rectangle/rectangle.hpp"
+#include <fstream>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-class Node {
-  public:
-    vector<Node> children;
-    vector<Rectangle> rectangles;
-    bool is_leaf;
-    Node *parent;
+Node::Node(vector<Rectangle> rectangles, bool is_leaf, Node *parent) {
+    this->rectangles = rectangles;
+    this->is_leaf = is_leaf;
+    this->parent = parent;
+}
 
-    Node(vector<Rectangle> rectangles, bool is_leaf, Node *parent) {
-        this->rectangles = rectangles;
-        this->is_leaf = is_leaf;
-        this->parent = parent;
-    }
-};
+RTree::RTree(int M) {
+    this->M = M;
+    this->root = new Node(vector<Rectangle>(), true, NULL);
+    // TODO: put nodes in file (NOT TXT FILE: should be binary)
+}
 
-class RTree {
-  public:
-    Node *root;
+void RTree::sayHello() {
+    cout << "Hello from Rtree!" << endl;
+}
 
-    RTree() {
-        this->root = new Node(vector<Rectangle>(), true, nullptr);
-    }
+/**
+ * Creates a new RTree object with the given maximum number of entries per node,
+ * containing the rectangles closest to the origin point.
+ *
+ * @param M The maximum number of entries per node.
+ * @param rectangles The list of rectangles to insert into the RTree.
+ * @return A new RTree object containing the closest rectangles.
+ */
+RTree RTree::fromNearestX(int M, vector<Rectangle> rectangles) {
+    cout << "fromNearestX" << endl;
+    return RTree(M);
+}
 
-    void insert(Rectangle rect) {
-        Node *leaf = choose_leaf(rect);
-        leaf->rectangles.push_back(rect);
-        if (leaf->rectangles.size() > 4) {
-            split_node(leaf);
-        }
-    }
+/**
+ * @brief Creates an RTree from a set of rectangles using the Hilbert Curve algorithm.
+ * 
+ * @param M The maximum number of entries per node.
+ * @param rectangles The set of rectangles to be inserted into the RTree.
+ * @return RTree The resulting RTree.
+ */
+RTree RTree::fromHilbertCurve(int M, vector<Rectangle> rectangles) {
+    cout << "fromHilbertCurve" << endl;
+    return RTree(M);
+}
 
-    Node *choose_leaf(Rectangle rect) {
-        Node *node = this->root;
-        while (!node->is_leaf) {
-            node = choose_subtree(node, rect);
-        }
-        return node;
-    }
-
-    Node *choose_subtree(Node *node, Rectangle rect) {
-        Node *best_child = nullptr;
-        double best_area = 0;
-        for (Node child : node->children) {
-            double area = rectangle_area(child.rectangles[0]);
-            if (best_child == nullptr || area < best_area) {
-                best_child = &child;
-                best_area = area;
-            }
-        }
-        return best_child;
-    }
-
-    void split_node(Node *node) {
-        vector<Rectangle> rectangles = node->rectangles;
-        vector<Rectangle> best_group1;
-        vector<Rectangle> best_group2;
-        double best_difference = 0;
-        for (int i = 0; i < rectangles.size(); i++) {
-            for (int j = i + 1; j < rectangles.size(); j++) {
-                vector<Rectangle> group1;
-                vector<Rectangle> group2;
-                for (int k = 0; k < rectangles.size(); k++) {
-                    if (k <= i || k <= j) {
-                        group1.push_back(rectangles[k]);
-                    } else {
-                        group2.push_back(rectangles[k]);
-                    }
-                }
-                double difference = abs(rectangle_area(group1[0]) - rectangle_area(group2[0]));
-                if (best_group1.size() == 0 || difference < best_difference) {
-                    best_group1 = group1;
-                    best_group2 = group2;
-                    best_difference = difference;
-                }
-            }
-        }
-        node->rectangles = best_group1;
-        Node *new_node = new Node(best_group2, node->is_leaf, node->parent);
-        node->parent->children.push_back(*new_node);
-    }
-};
+/**
+ * @brief Constructs an RTree recursively using the Sort-Tile-Recursive algorithm.
+ * 
+ * @param M The maximum number of entries per node.
+ * @param rectangles A vector of rectangles to be inserted into the RTree.
+ * @return RTree The constructed RTree.
+ */
+RTree RTree::fromSortTileRecursive(int M, vector<Rectangle> rectangles) {
+    cout << "fromSortTileRecursive" << endl;
+    return RTree(M);
+}
