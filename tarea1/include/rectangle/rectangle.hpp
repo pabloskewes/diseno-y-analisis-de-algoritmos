@@ -24,7 +24,7 @@ struct Rectangle {
 
 void print_rectangle(Rectangle rect);
 Point middle_point(Rectangle rect);
-double area(Rectangle rect);
+double rectangle_area(Rectangle rect);
 bool intersects(Rectangle rect1, Rectangle rect2);
 std::vector<Rectangle>
 generate_random_rectangles(long long num_rects, Point bottom_left_bound,

@@ -33,7 +33,7 @@ Point middle_point(Rectangle rect) {
  * @param rect The rectangle to calculate the area from.
  * @return The area of the rectangle.
  */
-double area(Rectangle rect) {
+double rectangle_area(Rectangle rect) {
     return (rect.top_right.x - rect.bottom_left.x) *
            (rect.top_right.y - rect.bottom_left.y);
 }
