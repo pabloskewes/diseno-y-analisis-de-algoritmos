@@ -75,6 +75,7 @@ vector<Rectangle> generate_random_rectangles(long long num_rects,
                                              bool show_progress_bar) {
     vector<Rectangle> rects;
     progressbar bar(num_rects);
+    bar.set_done_char("█");
     for (long long i = 0; i < num_rects; i++) {
         if (show_progress_bar) bar.update();
         Rectangle rect;
