@@ -22,6 +22,7 @@ struct Rectangle {
     Point top_right;
 };
 
+void print_rectangle(Rectangle rect);
 Point middle_point(Rectangle rect);
 bool intersects(Rectangle rect1, Rectangle rect2);
 std::vector<Rectangle>

@@ -1,6 +1,6 @@
 #include "rectangle/rectangle.hpp"
 #include "rtree/rtree.hpp"
-#include "tests/test_rectangles.hpp"
+#include "rectangle/test_rectangle.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -15,8 +15,8 @@ int main() {
     rtree.sayHello();
 
     // test_intersect();
-    // test_generate_random_rects();
-    test_generate_random_rects_massive(std::pow(2, 18));
+    test_generate_random_rects();
+    // test_generate_random_rects_massive(std::pow(2, 18));
 
     return 0;
 }

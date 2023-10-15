@@ -7,6 +7,16 @@
 using namespace std;
 
 /**
+    * Prints a rectangle to stdout.
+    * @param rect The rectangle to print.
+    */
+void print_rectangle(Rectangle rect) {
+    cout << "Rectangle(bottom_left=(" << rect.bottom_left.x << ", "
+         << rect.bottom_left.y << "), top_right=(" << rect.top_right.x << ", "
+         << rect.top_right.y << "))" << endl;
+}
+
+/**
  * Calculates the middle point of a rectangle.
  * @param rect The rectangle to calculate the middle point from.
  * @return The middle point of the rectangle.
