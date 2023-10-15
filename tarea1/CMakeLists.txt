@@ -4,6 +4,11 @@ project(RTree)
 
 include_directories(include)
 
-add_executable(RTree src/main.cpp src/rtree/rtree.cpp)
+add_executable(
+    RTree 
+    src/main.cpp 
+    src/rtree/rtree.cpp 
+    src/rectangle/rectangle.cpp
+)
 
-# target_link_libraries(RTree)
+target_link_libraries(RTree)
