@@ -7,9 +7,9 @@
 using namespace std;
 
 /**
-    * Prints a rectangle to stdout.
-    * @param rect The rectangle to print.
-    */
+ * Prints a rectangle to stdout.
+ * @param rect The rectangle to print.
+ */
 void print_rectangle(Rectangle rect) {
     cout << "Rectangle(bottom_left=(" << rect.bottom_left.x << ", "
          << rect.bottom_left.y << "), top_right=(" << rect.top_right.x << ", "
@@ -26,6 +26,16 @@ Point middle_point(Rectangle rect) {
     middle.x = (rect.bottom_left.x + rect.top_right.x) / 2;
     middle.y = (rect.bottom_left.y + rect.top_right.y) / 2;
     return middle;
+}
+
+/**
+ * Calculates the area of a rectangle.
+ * @param rect The rectangle to calculate the area from.
+ * @return The area of the rectangle.
+ */
+double area(Rectangle rect) {
+    return (rect.top_right.x - rect.bottom_left.x) *
+           (rect.top_right.y - rect.bottom_left.y);
 }
 
 /**
@@ -67,17 +77,16 @@ double random_double(double lower_bound, double upper_bound) {
  * @param max_side_length The maximum side length of the rectangles.
  * @return A vector of random rectangles.
  */
-vector<Rectangle> generate_random_rectangles(long long num_rects,
-                                             Point bottom_left_bound,
-                                             Point top_right_bound,
-                                             double min_side_length,
-                                             double max_side_length,
-                                             bool show_progress_bar) {
+vector<Rectangle>
+generate_random_rectangles(long long num_rects, Point bottom_left_bound,
+                           Point top_right_bound, double min_side_length,
+                           double max_side_length, bool show_progress_bar) {
     vector<Rectangle> rects;
     progressbar bar(num_rects);
     bar.set_done_char("█");
     for (long long i = 0; i < num_rects; i++) {
-        if (show_progress_bar) bar.update();
+        if (show_progress_bar)
+            bar.update();
         Rectangle rect;
         rect.bottom_left.x = random_double(bottom_left_bound.x,
                                            top_right_bound.x - max_side_length);
