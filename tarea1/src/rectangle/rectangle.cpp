@@ -1,5 +1,6 @@
 #include "rectangle/rectangle.hpp"
 #include "libs/progressbar.hpp"
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -75,6 +76,7 @@ double random_double(double lower_bound, double upper_bound) {
  * rectangles.
  * @param min_side_length The minimum side length of the rectangles.
  * @param max_side_length The maximum side length of the rectangles.
+ * @param show_progress_bar Whether to show a progress bar or not.
  * @return A vector of random rectangles.
  */
 vector<Rectangle>
@@ -98,5 +100,41 @@ generate_random_rectangles(long long num_rects, Point bottom_left_bound,
                            random_double(min_side_length, max_side_length);
         rects.push_back(rect);
     }
+    return rects;
+}
+
+/**
+ * Writes a vector of rectangles to a file.
+ * @param rects The vector of rectangles to write to a file.
+ * @param filename The name of the file to write to.
+ */
+void write_rectangles_to_file(vector<Rectangle> rects, string filename) {
+    ofstream file;
+    file.open(filename);
+    for (int i = 0; i < rects.size(); i++) {
+        file << rects[i].bottom_left.x << " " << rects[i].bottom_left.y << " "
+             << rects[i].top_right.x << " " << rects[i].top_right.y << endl;
+    }
+    file.close();
+}
+
+/**
+ * Reads a vector of rectangles from a file.
+ * @param filename The name of the file to read from.
+ * @return A vector of rectangles read from the file.
+ */
+vector<Rectangle> read_rectangles_from_file(string filename) {
+    vector<Rectangle> rects;
+    ifstream file;
+    file.open(filename);
+    string line;
+    while (getline(file, line)) {
+        Rectangle rect;
+        sscanf(line.c_str(), "%lf %lf %lf %lf", &rect.bottom_left.x,
+               &rect.bottom_left.y, &rect.top_right.x, &rect.top_right.y);
+        rects.push_back(rect);
+    }
+    file.close();
+
     return rects;
 }

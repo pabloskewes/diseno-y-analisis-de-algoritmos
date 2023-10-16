@@ -22,6 +22,18 @@ class Node {
 };
 
 /**
+ * @struct NodeData
+ * @brief A struct representing the data of a node in the R-tree that is stored
+ * in the file (i.e. not in memory)
+ */
+struct NodeData {
+    long long offset;
+    bool is_leaf;
+    vector<Rectangle> rectangles;
+    vector<long long> children_offsets;
+};
+
+/**
  * @class RTree
  * @brief A class representing an R-tree.
  */

@@ -2,6 +2,9 @@
 #define RECTANGLE_HPP
 
 #include <vector>
+#include <string>
+
+using namespace std;
 
 /**
  * @struct Point
@@ -30,5 +33,7 @@ std::vector<Rectangle>
 generate_random_rectangles(long long num_rects, Point bottom_left_bound,
                            Point top_right_bound, double min_side_length,
                            double max_side_length, bool show_progress_bar);
+void write_rectangles_to_file(std::vector<Rectangle> rects, string filename);
+std::vector<Rectangle> read_rectangles_from_file(string filename);
 
 #endif // RECTANGLE_HPP
