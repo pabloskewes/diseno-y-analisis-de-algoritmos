@@ -29,6 +29,7 @@ void print_rectangle(Rectangle rect);
 Point middle_point(Rectangle rect);
 double rectangle_area(Rectangle rect);
 bool intersects(Rectangle rect1, Rectangle rect2);
+Rectangle computeMBR(vector<Rectangle> rectangles);
 void write_rectangles_to_file(std::vector<Rectangle> rects, string filename);
 std::vector<Rectangle> read_rectangles_from_file(string filename);
 

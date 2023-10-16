@@ -1,7 +1,7 @@
 #include "rtree/RTree.hpp"
 #include "rectangle/rectangle.hpp"
-#include "rtree/NearestX.hpp"
 #include "rtree/HilbertCurve.hpp"
+#include "rtree/NearestX.hpp"
 #include "rtree/SortTileRecursive.hpp"
 
 #include <fstream>
@@ -17,7 +17,6 @@ using namespace std;
  * @param is_leaf Whether the node is a leaf or not.
  */
 Node::Node(int M, bool is_leaf) {
-    this->rectangles = vector<Rectangle>(M);
     this->children = vector<Node *>(M);
     this->is_leaf = is_leaf;
 }
@@ -25,15 +24,26 @@ Node::Node(int M, bool is_leaf) {
 /**
  * @brief Constructs a new Node object by providing all the necessary
  * information.
+ * @param MBR The Minimum Bounding Rectangle of the node.
  * @param rectangles The rectangles contained in the node.
  * @param children The children of the node.
  * @param is_leaf Whether the node is a leaf or not.
  */
-Node::Node(vector<Rectangle> rectangles, vector<Node *> children,
-           bool is_leaf) {
-    this->rectangles = rectangles;
+Node::Node(Rectangle MBR, vector<Node *> children, bool is_leaf) {
+    this->MBR = MBR;
     this->children = children;
     this->is_leaf = is_leaf;
+}
+
+/**
+ * @brief Prints the node to stdout: the MBR, whether it is a leaf or not, and
+ * the number of children.
+ */
+void Node::print() {
+    cout << "Node(MBR=(" << this->MBR.bottom_left.x << ", "
+         << this->MBR.bottom_left.y << "), (" << this->MBR.top_right.x << ", "
+         << this->MBR.top_right.y << "), is_leaf=" << this->is_leaf
+         << ", num_children=" << this->children.size() << ")" << endl;
 }
 
 RTree::RTree(int M) {
@@ -46,8 +56,8 @@ void RTree::sayHello() {
 }
 
 /**
- * Creates a new RTree object with the given maximum number of entries per node,
- * containing the rectangles closest to the origin point.
+ * Creates a new RTree object with the given maximum number of entries per
+ * node, containing the rectangles closest to the origin point.
  *
  * @param M The maximum number of entries per node.
  * @param rectangles The list of rectangles to insert into the RTree.
