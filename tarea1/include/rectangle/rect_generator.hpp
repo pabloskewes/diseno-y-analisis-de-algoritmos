@@ -13,4 +13,6 @@ generate_random_rectangles(long long num_rects, Point bottom_left_bound,
                            Point top_right_bound, double min_side_length,
                            double max_side_length, bool show_progress_bar);
 
+void generate_input_samples(int power);
+
 #endif // RECT_GENERATOR_HPP

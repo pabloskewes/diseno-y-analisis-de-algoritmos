@@ -1,11 +1,9 @@
 #include "rectangle/rect_generator.hpp"
 #include "libs/progressbar.hpp"
-#include <random>
-// #include <vector>
 #include <iostream>
+#include <random>
 
 using namespace std;
-
 
 /**
  * Generates a random double between the specified bounds.
@@ -55,4 +53,32 @@ generate_random_rectangles(long long num_rects, Point bottom_left_bound,
         rects.push_back(rect);
     }
     return rects;
+}
+
+/**
+ * Generates a sample of rectangles and writes them to a file. (Sets "R")
+ * @param power The power of 2 to use for the number of rectangles to generate.
+ */
+void generate_input_samples(int power) {
+    long long num_rects = pow(2, power);
+    Point bottom_left_bound = {0, 0};
+    Point top_right_bound = {500000, 500000};
+    double min_side_length = 0;
+    double max_side_length = 100;
+    string filename = "data/rectangles/input_" + to_string(power) + ".txt";
+
+    cout << "Generating " << num_rects << " random rectangles with side "
+         << "lengths between " << min_side_length << " and " << max_side_length
+         << endl
+         << "and within the bounds (" << bottom_left_bound.x << ", "
+         << bottom_left_bound.y << ") and (" << top_right_bound.x << ", "
+         << top_right_bound.y << ")" << endl;
+
+    vector<Rectangle> rects = generate_random_rectangles(
+        num_rects, bottom_left_bound, top_right_bound, min_side_length,
+        max_side_length, true);
+
+    cout << "Generated " << rects.size() << " rectangles." << endl;
+
+    write_rectangles_to_file(rects, filename);
 }
