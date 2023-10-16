@@ -1,6 +1,6 @@
 #include "rectangle/test_rectangle.hpp"
-#include "libs/progressbar.hpp"
 #include "rectangle/rectangle.hpp"
+#include "rectangle/rect_generator.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
