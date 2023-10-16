@@ -2,7 +2,7 @@
 #define NEAREST_X_HPP
 
 #include "rectangle/rectangle.hpp"
-#include "rtree/rtree.hpp"
+#include "rtree/RTree.hpp"
 #include <vector>
 
 using namespace std;

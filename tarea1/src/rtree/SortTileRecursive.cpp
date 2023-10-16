@@ -1,6 +1,6 @@
 #include "rtree/SortTileRecursive.hpp"
 #include "rectangle/rectangle.hpp"
-#include "rtree/rtree.hpp"
+#include "rtree/RTree.hpp"
 
 #include <algorithm>
 #include <fstream>

@@ -1,7 +1,7 @@
 #include "rectangle/rectangle.hpp"
 #include "rectangle/rect_generator.hpp"
 #include "rectangle/test_rectangle.hpp"
-#include "rtree/rtree.hpp"
+#include "rtree/RTree.hpp"
 
 #include <cmath>
 #include <iostream>

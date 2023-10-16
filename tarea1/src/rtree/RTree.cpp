@@ -1,4 +1,4 @@
-#include "rtree/rtree.hpp"
+#include "rtree/RTree.hpp"
 #include "rectangle/rectangle.hpp"
 #include "rtree/NearestX.hpp"
 #include "rtree/HilbertCurve.hpp"
