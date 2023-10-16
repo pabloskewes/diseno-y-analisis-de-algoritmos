@@ -19,63 +19,97 @@ int recursionStep = 0;
  * @brief Computes the Minimum Bounding Rectangle of a set of rectangles.
  * @param M The maximum number of children a node can have.
  * @param rectangles The vector of rectangles to compute the MBR from.
+ * @param tuple the vector of tuples
  * @return The MBR of the rectangles.
  */
 
-Node _nearestX(int M, vector<Node *> nodes) {
+Node _nearestX(int M, vector<Node *> nodes, vector<NodeTuple *> tuples) {
 
     cout << "Recursion step: " << recursionStep << endl;
     recursionStep++;
 
-    vector<NodeTuple> tuples;
-    for (Node *node : nodes) { // O(n)
+    // Ignore this part  
+    // vector<NodeTuple> tuples;
+    // for (Node *node : nodes) { // O(n)
+    //     NodeTuple tuple;
+    //     tuple.node = node;
+    //     tuple.center = middle_point(node->MBR);
+    //     tuples.push_back(tuple);
+    // }
+    // cout << "Created " << tuples.size() << " tuples." << endl;
+
+    // sort(tuples.begin(), tuples.end(), // O(n log n)
+    //      [](NodeTuple a, NodeTuple b) { return a.center.x < b.center.x; });
+
+    // cout << "Printing first 5 ordered tuples" << endl;
+    // for (int i = 0; i < 5; i++) {
+    //     NodeTuple tuple = tuples[i];
+    //     cout << "Tuple " << i << endl;
+    //     cout << "Center: (" << tuple.center.x << ", " << tuple.center.y << ")"
+    //          << endl;
+    //     print_rectangle(tuple.node->MBR);
+    // }
+// 
+    // cout << "Printing last 5 ordered tuples" << endl;
+    // for (int i = tuples.size() - 5; i < tuples.size(); i++) {
+    //     NodeTuple tuple = tuples[i];
+    //     cout << "Tuple " << i << endl;
+    //     cout << "Center: (" << tuple.center.x << ", " << tuple.center.y << ")"
+    //          << endl;
+    //     print_rectangle(tuple.node->MBR);
+    // }
+
+    // Ignore this part
+    // vector<Node *> new_nodes;
+    // for (int i = 0; i < tuples.size(); i += M) { // O(n)
+    //     vector<Node *> children;
+    //     vector<Rectangle> rectangles;
+    //     for (int j = i; j < i + M && j < tuples.size(); j++) {
+    //         Node *child = tuples[j].node;
+    //         children.push_back(child);
+    //         rectangles.push_back(child->MBR);
+    //     }
+// 
+    //     Rectangle MBR = computeMBR(rectangles);
+    //     Node parent = Node(MBR, children, false);
+    //     new_nodes.push_back(&parent);
+    // }
+
+    vector<Node *> new_nodes;
+    for (int i = 0; i < tuples.size(); i += M) { // O(n)
+        vector<Node *> parent;
+        vector<Rectangle> rectangles;
+        for (int j = i; j < i + M && j < tuples.size(); j++) {
+            Node *child = tuples[j].node;
+            parent.push_back(child);
+            rectangles.push_back(child->MBR);
+        }
+
+        Rectangle MBR = computeMBR(rectangles);
+        Node parent = Node(MBR, parent, false);
+        new_nodes.push_back(&parent);
+    }
+
+    vector<NodeTuple *> new_tuples;
+    for (Node *node : new_nodes) { // O(n)
         NodeTuple tuple;
         tuple.node = node;
         tuple.center = middle_point(node->MBR);
         tuples.push_back(tuple);
     }
-    cout << "Created " << tuples.size() << " tuples." << endl;
 
-    sort(tuples.begin(), tuples.end(), // O(n log n)
-         [](NodeTuple a, NodeTuple b) { return a.center.x < b.center.x; });
 
-    cout << "Printing first 5 ordered tuples" << endl;
-    for (int i = 0; i < 5; i++) {
-        NodeTuple tuple = tuples[i];
-        cout << "Tuple " << i << endl;
-        cout << "Center: (" << tuple.center.x << ", " << tuple.center.y << ")"
-             << endl;
-        print_rectangle(tuple.node->MBR);
-    }
-
-    cout << "Printing last 5 ordered tuples" << endl;
-    for (int i = tuples.size() - 5; i < tuples.size(); i++) {
-        NodeTuple tuple = tuples[i];
-        cout << "Tuple " << i << endl;
-        cout << "Center: (" << tuple.center.x << ", " << tuple.center.y << ")"
-             << endl;
-        print_rectangle(tuple.node->MBR);
-    }
-
-    vector<Node *> new_nodes;
-    for (int i = 0; i < tuples.size(); i += M) { // O(n)
-        vector<Node *> children;
-        vector<Rectangle> rectangles;
-        for (int j = i; j < i + M && j < tuples.size(); j++) {
-            Node *child = tuples[j].node;
-            children.push_back(child);
-            rectangles.push_back(child->MBR);
-        }
-
-        Rectangle MBR = computeMBR(rectangles);
-        Node parent = Node(MBR, children, false);
-        new_nodes.push_back(&parent);
-    }
 
     if (new_nodes.size() == 1) {
+        cout << "Printing father node" << endl;
+        NodeTuple tuple = new_tuples[0];
+            cout << "Tuple " << 0 << endl;
+            cout << "Center: (" << tuple.center.x << ", " << tuple.center.y << ")"
+                 << endl;
+            print_rectangle(tuple.node->MBR);
         return *new_nodes[0];
     } else {
-        return _nearestX(M, new_nodes);
+        return _nearestX(M, new_nodes, new_tuples);
     }
 }
 
@@ -115,5 +149,21 @@ Node nearestX(int M, vector<Rectangle> rectangles) {
     //     print_rectangle(MBR);
     // }
 
-    return _nearestX(M, nodes);
+    // Create tuple with center of each rectangle
+    vector<NodeTuple *> tuples;
+    for (Node *node : nodes) { // O(n)
+        NodeTuple tuple;
+        tuple.node = node;
+        tuple.center = middle_point(node->MBR);
+        tuples.push_back(tuple);
+    }
+    cout << "Created " << tuples.size() << " tuples." << endl;
+
+    sort(tuples.begin(), tuples.end(), // O(n log n)
+         [](NodeTuple a, NodeTuple b) { return a.center.x < b.center.x; });
+
+
+    // return _nearestX(M, nodes);
+    // We return _nearestX() with the tupls created
+    return _nearestX(M, nodes, tuples);
 }
