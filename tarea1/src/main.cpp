@@ -34,14 +34,19 @@ int main() {
     // test_write_and_read_rects(100);
     // generate_R_sets();
 
+    string sample_file = "data/rectangles/input_15.txt";
+    vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
+    RTree::fromSortTileRecursive(100, rectangles);
+
     NodeData node_data = {0, true, std::vector<Rectangle>(),
                           std::vector<long long>()};
 
-    cout << "size of long long: " << sizeof(long long) << endl;
-    cout << "size of bool: " << sizeof(bool) << endl;
-    cout << "size of vector<Rectangle>: " << sizeof(std::vector<Rectangle>)
-    << endl; cout << "size of Rectangle: " << sizeof(Rectangle) << endl; cout
-    << "size of NodeData: " << sizeof(node_data) << endl;
+    std::cout << "sizeof(NodeData) = " << sizeof(NodeData) << endl;
+    std::cout << "sizeof(Rectangle) = " << sizeof(Rectangle) << endl;
+    std::cout << "sizeof(long long) = " << sizeof(long long) << endl;
+    std::cout << "sizeof(bool) = " << sizeof(bool) << endl;
+    std::cout << "sizeof(int) = " << sizeof(int) << endl;
+    std::cout << "sizeof(long) = " << sizeof(long) << endl;
 
     return 0;
 }

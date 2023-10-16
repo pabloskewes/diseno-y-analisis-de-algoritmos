@@ -1,5 +1,9 @@
 #include "rtree/rtree.hpp"
 #include "rectangle/rectangle.hpp"
+#include "rtree/NearestX.hpp"
+#include "rtree/HilbertCurve.hpp"
+#include "rtree/SortTileRecursive.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -50,7 +54,7 @@ void RTree::sayHello() {
  * @return A new RTree object containing the closest rectangles.
  */
 RTree RTree::fromNearestX(int M, vector<Rectangle> rectangles) {
-    cout << "fromNearestX" << endl;
+    Node root = nearestX(M, rectangles);
     return RTree(M);
 }
 
@@ -63,7 +67,7 @@ RTree RTree::fromNearestX(int M, vector<Rectangle> rectangles) {
  * @return RTree The resulting RTree.
  */
 RTree RTree::fromHilbertCurve(int M, vector<Rectangle> rectangles) {
-    cout << "fromHilbertCurve" << endl;
+    Node root = hilbertCurve(M, rectangles);
     return RTree(M);
 }
 
@@ -76,6 +80,6 @@ RTree RTree::fromHilbertCurve(int M, vector<Rectangle> rectangles) {
  * @return RTree The constructed RTree.
  */
 RTree RTree::fromSortTileRecursive(int M, vector<Rectangle> rectangles) {
-    cout << "fromSortTileRecursive" << endl;
+    Node root = sortTileRecursive(M, rectangles);
     return RTree(M);
 }
