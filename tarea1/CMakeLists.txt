@@ -10,6 +10,7 @@ add_executable(
     src/rtree/rtree.cpp 
     src/rectangle/rectangle.cpp
     src/rectangle/test_rectangle.cpp
+    src/rectangle/rect_generator.cpp
 )
 
 target_link_libraries(RTree)

@@ -1,5 +1,6 @@
 #include "rectangle/rectangle.hpp"
 #include "libs/progressbar.hpp"
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -33,7 +34,7 @@ Point middle_point(Rectangle rect) {
  * @param rect The rectangle to calculate the area from.
  * @return The area of the rectangle.
  */
-double area(Rectangle rect) {
+double rectangle_area(Rectangle rect) {
     return (rect.top_right.x - rect.bottom_left.x) *
            (rect.top_right.y - rect.bottom_left.y);
 }
@@ -53,50 +54,37 @@ bool intersects(Rectangle rect1, Rectangle rect2) {
 }
 
 /**
- * Generates a random double between the specified bounds.
- * @param lower_bound The lower bound for the random double.
- * @param upper_bound The upper bound for the random double.
- * @return A random double between the specified bounds.
+ * Writes a vector of rectangles to a file.
+ * @param rects The vector of rectangles to write to a file.
+ * @param filename The name of the file to write to.
  */
-double random_double(double lower_bound, double upper_bound) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(lower_bound, upper_bound);
-    return dis(gen);
+void write_rectangles_to_file(vector<Rectangle> rects, string filename) {
+    ofstream file;
+    file.open(filename);
+    for (int i = 0; i < rects.size(); i++) {
+        file << rects[i].bottom_left.x << " " << rects[i].bottom_left.y << " "
+             << rects[i].top_right.x << " " << rects[i].top_right.y << endl;
+    }
+    file.close();
 }
 
 /**
- * Generates a set of random rectangles, with random side lengths and random
- * positions. The rectangles are guaranteed to be within the bounds specified.
- * @param num_rects The number of rectangles to generate.
- * @param bottom_left_bound The lower bound for the bottom left point of the
- * rectangles.
- * @param top_right_bound The upper bound for the top right point of the
- * rectangles.
- * @param min_side_length The minimum side length of the rectangles.
- * @param max_side_length The maximum side length of the rectangles.
- * @return A vector of random rectangles.
+ * Reads a vector of rectangles from a file.
+ * @param filename The name of the file to read from.
+ * @return A vector of rectangles read from the file.
  */
-vector<Rectangle>
-generate_random_rectangles(long long num_rects, Point bottom_left_bound,
-                           Point top_right_bound, double min_side_length,
-                           double max_side_length, bool show_progress_bar) {
+vector<Rectangle> read_rectangles_from_file(string filename) {
     vector<Rectangle> rects;
-    progressbar bar(num_rects);
-    bar.set_done_char("█");
-    for (long long i = 0; i < num_rects; i++) {
-        if (show_progress_bar)
-            bar.update();
+    ifstream file;
+    file.open(filename);
+    string line;
+    while (getline(file, line)) {
         Rectangle rect;
-        rect.bottom_left.x = random_double(bottom_left_bound.x,
-                                           top_right_bound.x - max_side_length);
-        rect.bottom_left.y = random_double(bottom_left_bound.y,
-                                           top_right_bound.y - max_side_length);
-        rect.top_right.x = rect.bottom_left.x +
-                           random_double(min_side_length, max_side_length);
-        rect.top_right.y = rect.bottom_left.y +
-                           random_double(min_side_length, max_side_length);
+        sscanf(line.c_str(), "%lf %lf %lf %lf", &rect.bottom_left.x,
+               &rect.bottom_left.y, &rect.top_right.x, &rect.top_right.y);
         rects.push_back(rect);
     }
+    file.close();
+
     return rects;
 }

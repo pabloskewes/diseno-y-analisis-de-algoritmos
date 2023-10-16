@@ -21,7 +21,7 @@ run:
 	@echo "Running..."
 	@./$(BUILD_DIR)/$(RTREE_EXE)
 
-clear:
+clean-build:
 	@echo "Cleaning..."
 	@rm -rf $(BUILD_DIR)
 
@@ -31,3 +31,7 @@ cache-usage:
 free-cache:
 	@echo "Freeing cache..."
 	@sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches"
+
+clear-input-data:
+	@echo "Clearing input data..."
+	@rm -rf data/rectangles/*.txt

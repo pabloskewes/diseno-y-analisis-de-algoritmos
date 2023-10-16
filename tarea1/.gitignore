@@ -9,3 +9,6 @@
 # Build directories
 build/
 bin/
+
+# Data
+data/*
