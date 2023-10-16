@@ -16,9 +16,10 @@ class Node {
     vector<Node *> children;
     vector<Rectangle> rectangles;
     bool is_leaf;
-    Node *parent;
 
-    Node(std::vector<Rectangle> rectangles, bool is_leaf, Node *parent);
+    Node(int M, bool is_leaf);
+    Node(std::vector<Rectangle> rectangles, std::vector<Node *> children,
+         bool is_leaf);
 };
 
 /**

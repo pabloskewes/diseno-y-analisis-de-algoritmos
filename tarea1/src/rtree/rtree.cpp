@@ -6,15 +6,34 @@
 
 using namespace std;
 
-Node::Node(vector<Rectangle> rectangles, bool is_leaf, Node *parent) {
-    this->rectangles = rectangles;
+/**
+ * @brief Constructs a new empty Node object, with a fixed maximum number of
+ * entries per node.
+ * @param M The maximum number of entries per node.
+ * @param is_leaf Whether the node is a leaf or not.
+ */
+Node::Node(int M, bool is_leaf) {
+    this->rectangles = vector<Rectangle>(M);
+    this->children = vector<Node *>(M);
     this->is_leaf = is_leaf;
-    this->parent = parent;
+}
+
+/**
+ * @brief Constructs a new Node object by providing all the necessary
+ * information.
+ * @param rectangles The rectangles contained in the node.
+ * @param children The children of the node.
+ * @param is_leaf Whether the node is a leaf or not.
+ */
+Node::Node(vector<Rectangle> rectangles, vector<Node *> children,
+           bool is_leaf) {
+    this->rectangles = rectangles;
+    this->children = children;
+    this->is_leaf = is_leaf;
 }
 
 RTree::RTree(int M) {
     this->M = M;
-    this->root = new Node(vector<Rectangle>(), true, NULL);
     // TODO: put nodes in file (NOT TXT FILE: should be binary)
 }
 
@@ -36,8 +55,9 @@ RTree RTree::fromNearestX(int M, vector<Rectangle> rectangles) {
 }
 
 /**
- * @brief Creates an RTree from a set of rectangles using the Hilbert Curve algorithm.
- * 
+ * @brief Creates an RTree from a set of rectangles using the Hilbert Curve
+ * algorithm.
+ *
  * @param M The maximum number of entries per node.
  * @param rectangles The set of rectangles to be inserted into the RTree.
  * @return RTree The resulting RTree.
@@ -48,8 +68,9 @@ RTree RTree::fromHilbertCurve(int M, vector<Rectangle> rectangles) {
 }
 
 /**
- * @brief Constructs an RTree recursively using the Sort-Tile-Recursive algorithm.
- * 
+ * @brief Constructs an RTree recursively using the Sort-Tile-Recursive
+ * algorithm.
+ *
  * @param M The maximum number of entries per node.
  * @param rectangles A vector of rectangles to be inserted into the RTree.
  * @return RTree The constructed RTree.
