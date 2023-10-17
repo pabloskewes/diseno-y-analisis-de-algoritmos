@@ -18,10 +18,9 @@ int recursionStep = 0;
  * @param nodes The list of nodes to group.
  * @return The root node of the RTree.
  */
-Node* _nearestX(int M, vector<Node *> nodes) {
+Node *_nearestX(int M, vector<Node *> nodes) {
 
-    cout << "Recursion step: " << recursionStep << endl;
-    recursionStep++;
+    cout << "NearestX recursion step " << recursionStep++ << endl;
 
     // Iterate over nodes and group them into new nodes
     vector<Node *> new_nodes;
@@ -63,8 +62,8 @@ Node* _nearestX(int M, vector<Node *> nodes) {
  * new set of nodes. This process is repeated until all nodes from one iteration
  * can be grouped into a single root node.
  */
-Node* nearestX(int M, vector<Rectangle> rectangles) {
-    cout << "NearestX" << endl;
+Node *nearestX(int M, vector<Rectangle> rectangles) {
+    cout << "Creating RTree with NearestX algorithm..." << endl;
 
     // Create tuple with center of each rectangle
     vector<tuple<Rectangle, Point>> tuples;
