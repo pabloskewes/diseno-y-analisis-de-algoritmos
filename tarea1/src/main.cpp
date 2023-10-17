@@ -26,35 +26,11 @@ int calculate_M(int B, int node_size, int child_size) {
     return (B - node_size) / child_size;
 }
 
-int main() {
-    optimize();
-
-    int B = 4096; // 4KB: block size
-    int node_size = sizeof(bool) +
-                    sizeof(long long); // 1 byte for is_leaf, 8 bytes for offset
-    int child_size =
-        sizeof(Rectangle) +
-        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
-    int M = calculate_M(B, node_size, child_size);
-
-    cout << "M=" << M << endl;
-
-    // test_intersect();
-    // test_generate_random_rects();
-    // test_generate_random_rects_massive(std::pow(2, 20));
-    // test_write_and_read_rects(100);
-    // test_computeMBR();
-    // generate_R_sets();
-    int power = 21;
-
+RTree generate_nearest_x_binary(int power, int M) {
     string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
 
     cout << "Number of rectangles: " << rectangles.size() << endl;
-    // print first 5 rectangles
-    for (int i = 0; i < 5; i++) {
-        print_rectangle(rectangles[i]);
-    }
 
     cout << "Building R-tree..." << endl;
     RTree rtree1 = RTree::fromNearestX(M, rectangles);
@@ -63,6 +39,49 @@ int main() {
     rtree1.root->print();
 
     cout << "Height: " << rtree1.getHeight() << endl;
+
+    string output_file = "data/btrees/nearestx_" + to_string(power) + ".bin";
+    rtree1.setNodesLocation(output_file);
+    rtree1.saveNodesToDisk();
+
+    return rtree1;
+}
+
+int main() {
+    optimize();
+
+    // Computing right size for M
+    int B = 4096; // 4KB: block size
+
+    int node_size =
+        sizeof(bool) +
+        sizeof(long long) + // 1 byte for is_leaf, 8 bytes for offses
+        sizeof(int);        // 4 bytes for num_children
+
+    int child_size =
+        sizeof(Rectangle) +
+        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
+
+    int M = calculate_M(B, node_size, child_size);
+
+    cout << "M=" << M << endl;
+
+    int power = 17;
+
+    RTree rtree1 = generate_nearest_x_binary(power, M);
+    NodeData root = rtree1.readNode(0);
+    cout << "Root: " << endl;
+    cout << "Offset: " << root.offset << endl;
+    cout << "Is leaf: " << root.is_leaf << endl;
+    cout << "Rectangles: " << endl;
+    for (Rectangle rectangle : root.rectangles) {
+        cout << rectangle.bottom_left.x << " " << rectangle.bottom_left.y << " "
+             << rectangle.top_right.x << " " << rectangle.top_right.y << endl;
+    }
+    cout << "Children offsets: " << endl;
+    for (long long child_offset : root.children_offsets) {
+        cout << child_offset << endl;
+    }
 
     return 0;
 }
