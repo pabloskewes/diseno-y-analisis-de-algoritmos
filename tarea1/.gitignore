@@ -11,4 +11,6 @@ build/
 bin/
 
 # Data
-data/*
+data/rectangles/*.txt
+data/btree/*.bin
+data/results/*.txt

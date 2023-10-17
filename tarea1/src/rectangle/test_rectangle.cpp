@@ -1,6 +1,6 @@
 #include "rectangle/test_rectangle.hpp"
-#include "rectangle/rectangle.hpp"
 #include "rectangle/rect_generator.hpp"
+#include "rectangle/rectangle.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -107,4 +107,26 @@ void test_write_and_read_rects(int N) {
         cout << "Rectangle " << i << ":" << endl;
         print_rectangle(read_rects[i]);
     }
+}
+
+void test_computeMBR() {
+    Point bottom_left_bound = {0, 0};
+    Point top_right_bound = {100, 100};
+    double min_side_length = 0;
+    double max_side_length = 10;
+
+    vector<Rectangle> rects =
+        generate_random_rectangles(10, bottom_left_bound, top_right_bound,
+                                   min_side_length, max_side_length, false);
+
+    // print rectangles
+    for (int i = 0; i < rects.size(); i++) {
+        cout << "Rectangle " << i << ":" << endl;
+        print_rectangle(rects[i]);
+    }
+
+    Rectangle MBR = computeMBR(rects);
+
+    cout << "MBR:" << endl;
+    print_rectangle(MBR);
 }

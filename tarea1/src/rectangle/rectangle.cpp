@@ -54,6 +54,30 @@ bool intersects(Rectangle rect1, Rectangle rect2) {
 }
 
 /**
+ * Generates a random double between the specified bounds.
+ * @param rectangles The vector of rectangles to compute the MBR from.
+ * @return The MBR of the rectangles.
+ */
+Rectangle computeMBR(vector<Rectangle> rectangles) {
+    double min_x = rectangles[0].bottom_left.x;
+    double min_y = rectangles[0].bottom_left.y;
+    double max_x = rectangles[0].top_right.x;
+    double max_y = rectangles[0].top_right.y;
+    for (int i = 1; i < rectangles.size(); i++) {
+        if (rectangles[i].bottom_left.x < min_x)
+            min_x = rectangles[i].bottom_left.x;
+        if (rectangles[i].bottom_left.y < min_y)
+            min_y = rectangles[i].bottom_left.y;
+        if (rectangles[i].top_right.x > max_x)
+            max_x = rectangles[i].top_right.x;
+        if (rectangles[i].top_right.y > max_y)
+            max_y = rectangles[i].top_right.y;
+    }
+    Rectangle MBR = {{min_x, min_y}, {max_x, max_y}};
+    return MBR;
+}
+
+/**
  * Writes a vector of rectangles to a file.
  * @param rects The vector of rectangles to write to a file.
  * @param filename The name of the file to write to.
