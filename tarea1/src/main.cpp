@@ -22,13 +22,21 @@ void generate_R_sets() {
     }
 }
 
+int calculate_M(int B, int node_size, int child_size) {
+    return (B - node_size) / child_size;
+}
+
 int main() {
     optimize();
 
     int B = 4096; // 4KB: block size
-    int node_size =
-        sizeof(Rectangle) + sizeof(bool) + sizeof(long long); // 41 bytes
-    int M = (B - node_size) / sizeof(long long); // (B - 41) / 8 = 506
+    int node_size = sizeof(bool) +
+                    sizeof(long long); // 1 byte for is_leaf, 8 bytes for offset
+    int child_size =
+        sizeof(Rectangle) +
+        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
+    int M = calculate_M(B, node_size, child_size);
+
     cout << "M=" << M << endl;
 
     // test_intersect();
@@ -37,39 +45,24 @@ int main() {
     // test_write_and_read_rects(100);
     // test_computeMBR();
     // generate_R_sets();
+    int power = 21;
 
-    string sample_file = "data/rectangles/input_15.txt";
+    string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
 
-    // cout << "Number of rectangles: " << rectangles.size() << endl;
-    // // print first 5 rectangles
-    // for (int i = 0; i < 5; i++) {
-    //     print_rectangle(rectangles[i]);
-    // }
+    cout << "Number of rectangles: " << rectangles.size() << endl;
+    // print first 5 rectangles
+    for (int i = 0; i < 5; i++) {
+        print_rectangle(rectangles[i]);
+    }
 
     cout << "Building R-tree..." << endl;
     RTree rtree1 = RTree::fromNearestX(M, rectangles);
 
-    Node root = *rtree1.root;
-    Rectangle MBR = root.MBR;
-    root.print();
+    cout << "Printing root node..." << endl;
+    rtree1.root->print();
 
-    for (int i = 0; i < M; i++) {
-        cout << "Child " << i << endl;
-        Node *child = root.children[i];
-        Rectangle MBR = child->MBR;
-    }
-
-    // get tree height
-    int height = 1;
-    Node *node = rtree1.root;
-    while (!node->is_leaf) {
-        node = node->children[0];
-        height++;
-    }
-    cout << "Height: " << height << endl;
-
-    // NodeData node_data = {0, rectangles[0], true, {10, 20, 30}};
+    cout << "Height: " << rtree1.getHeight() << endl;
 
     return 0;
 }

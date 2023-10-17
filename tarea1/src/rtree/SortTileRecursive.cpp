@@ -8,9 +8,9 @@
 
 using namespace std;
 
-Node sortTileRecursive(int M, vector<Rectangle> rectangles) {
+Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
 
     cout << "SortTileRecursive" << endl;
-
-    return Node(M, false);
+    Node *dummy = new Node(M, false);
+    return dummy;
 }

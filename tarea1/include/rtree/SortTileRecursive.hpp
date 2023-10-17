@@ -7,6 +7,6 @@
 
 using namespace std;
 
-Node sortTileRecursive(int M, vector<Rectangle> rectangles);
+Node* sortTileRecursive(int M, vector<Rectangle> rectangles);
 
 #endif // SORT_TILE_RECURSIVE_HPP

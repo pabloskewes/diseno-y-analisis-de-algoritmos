@@ -18,10 +18,11 @@ class Node {
   public:
     Rectangle MBR;
     vector<Node *> children;
+    vector<Rectangle> rectangles;
     bool is_leaf;
 
     Node(int M, bool is_leaf);
-    Node(Rectangle MBR, std::vector<Node *> children, bool is_leaf);
+    Node(vector<Node *> children, vector<Rectangle> rectangles, bool is_leaf);
 
     void print();
 };
@@ -51,10 +52,12 @@ class RTree {
     Node *root;
     int M;
     fstream file;
+    bool tree_loaded;
 
-    RTree(int M);
+    RTree(int M, Node *root, bool tree_loaded);
 
     void sayHello();
+    int getHeight();
 
     static RTree fromNearestX(int M, vector<Rectangle> rectangles);
     static RTree fromHilbertCurve(int M, vector<Rectangle> rectangles);

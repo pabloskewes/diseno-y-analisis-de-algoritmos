@@ -8,8 +8,9 @@
 
 using namespace std;
 
-Node hilbertCurve(int M, vector<Rectangle> rectangles) {
+Node* hilbertCurve(int M, vector<Rectangle> rectangles) {
 
     cout << "HilbertCurve" << endl;
-    return Node(M, false);
+    Node* dummy = new Node(M, false);
+    return dummy;
 }
