@@ -17,34 +17,65 @@ int recursionStepSortTileRecursive = 0;
  * M children.
  * @param M The maximum number of children a node can have.
  * @param nodes The list of nodes to group.
+ * @param S The number of groups created in the previous step.
  * @return The root node of the RTree.
  */
-Node *_sortTileRecursive(int M, vector<Node *> nodes) {
+Node *_sortTileRecursive(int M, vector<Node *> nodes, int S) {
 
     cout << "Sort-Tile-Recursive recursion step "
          << recursionStepSortTileRecursive++ << endl;
 
-    // Iterate over nodes and group them into new nodes
-    vector<Node *> new_nodes;
-    for (int i = 0; i < nodes.size(); i += M) { // O(n)
-        vector<Node *> children;
-        vector<Rectangle> rectangles;
-        for (int j = i; j < i + M && j < nodes.size(); j++) {
-            Node *node = nodes[j];
-            children.push_back(node);
-            rectangles.push_back(node->MBR);
+    int n = nodes.size();
+
+    // Group nodes into S groups of size M*S over the x-axis
+    vector<vector<Node *>> groups;
+    for (int i = 0; i < n; i += M * S) { // O(n)
+        vector<Node *> group;
+        for (int j = i; j < i + M * S && j < n; j++) {
+            group.push_back(nodes[j]);
         }
-        Node *new_node = new Node(children, rectangles, false);
-        new_nodes.push_back(new_node);
+        groups.push_back(group);
+    }
+    // Group each group into S groups of size M over the y-axis
+    vector<vector<vector<Node *>>> groups2;
+    for (int i = 0; i < groups.size(); i++) { // O(n)
+        vector<vector<Node *>> group2;
+        for (int j = 0; j < groups[i].size(); j += M) {
+            vector<Node *> group3;
+            for (int k = j; k < j + M && k < groups[i].size(); k++) {
+                group3.push_back(groups[i][k]);
+            }
+            group2.push_back(group3);
+        }
+        groups2.push_back(group2);
+    }
+
+    // Create nodes from each group (S*S nodes)
+    vector<Node *> new_nodes;  
+    for (int i = 0; i < groups2.size(); i++) { // O(n)
+        for (int j = 0; j < groups2[i].size(); j++) {
+            vector<Node *> children;
+            vector<Rectangle> rectangles;
+            for (int k = 0; k < groups2[i][j].size(); k++) {
+                Node *node = groups2[i][j][k];
+                children.push_back(node);
+                rectangles.push_back(node->MBR);
+            }
+            Node *new_node = new Node(children, rectangles, false);
+            new_nodes.push_back(new_node);
+        }
     }
 
     // If there is only one node, return it
     if (new_nodes.size() == 1) {
+        cout << "Root node:" << endl;
         new_nodes[0]->print();
         return new_nodes[0];
     } else {
-        return _sortTileRecursive(M, new_nodes);
+        return _sortTileRecursive(M, new_nodes, S);
     }
+
+
 }
 /**
  * @brief Uses the Sort-Tile-Recursive algorithm build the root node of the
@@ -131,4 +162,6 @@ Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
             leafs.push_back(leaf);
         }
     }
+
+    return _sortTileRecursive(M, leafs, S);
 }
