@@ -59,7 +59,7 @@ int main() {
     cout << "Building R-tree..." << endl;
     // RTree rtree1 = RTree::fromNearestX(M, rectangles);
     // hilbert tree
-    RTree rtree1 = RTree::fromHilbertCurve(M, rectangles);
+    RTree rtree1 = RTree::fromSortTileRecursive(M, rectangles);
 
     cout << "Printing root node..." << endl;
     rtree1.root->print();
