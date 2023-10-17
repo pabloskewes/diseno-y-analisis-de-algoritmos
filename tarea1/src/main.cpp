@@ -45,7 +45,7 @@ int main() {
     // test_write_and_read_rects(100);
     // test_computeMBR();
     // generate_R_sets();
-    int power = 21;
+    int power = 24;
 
     string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
@@ -57,7 +57,9 @@ int main() {
     }
 
     cout << "Building R-tree..." << endl;
-    RTree rtree1 = RTree::fromNearestX(M, rectangles);
+    // RTree rtree1 = RTree::fromNearestX(M, rectangles);
+    // hilbert tree
+    RTree rtree1 = RTree::fromHilbertCurve(M, rectangles);
 
     cout << "Printing root node..." << endl;
     rtree1.root->print();
