@@ -11,6 +11,6 @@ using namespace std;
 Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
 
     cout << "SortTileRecursive" << endl;
-    Node *dummy = new Node(M, false);
+    Node *dummy = new Node(vector<Node *>(), vector<Rectangle>(), false);
     return dummy;
 }

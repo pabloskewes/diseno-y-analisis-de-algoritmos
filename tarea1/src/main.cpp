@@ -33,7 +33,7 @@ RTree generate_nearest_x_binary(int power, int M) {
     cout << "Number of rectangles: " << rectangles.size() << endl;
 
     cout << "Building R-tree..." << endl;
-    RTree rtree1 = RTree::fromNearestX(M, rectangles);
+    RTree rtree1 = RTree::bulkLoad(M, rectangles, BulkLoadingAlgorithm::NearestX);
 
     cout << "Printing root node..." << endl;
     rtree1.root->print();

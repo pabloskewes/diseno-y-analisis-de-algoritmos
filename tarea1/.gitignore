@@ -12,5 +12,5 @@ bin/
 
 # Data
 data/rectangles/*.txt
-data/btree/*.bin
+data/btrees/*.bin
 data/results/*.txt

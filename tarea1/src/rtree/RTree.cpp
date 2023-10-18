@@ -13,44 +13,6 @@ using namespace std;
 namespace fs = std::filesystem;
 
 /**
- * @brief Constructs a new empty Node object, with a fixed maximum number of
- * entries per node.
- * @param M The maximum number of entries per node.
- * @param is_leaf Whether the node is a leaf or not.
- */
-Node::Node(int M, bool is_leaf) {
-    this->children = vector<Node *>(M);
-    this->is_leaf = is_leaf;
-}
-
-/**
- * @brief Constructs a new Node object by providing all the necessary
- * information.
- * @param MBR The Minimum Bounding Rectangle of the node.
- * @param rectangles The rectangles contained in the node.
- * @param children The children of the node.
- * @param is_leaf Whether the node is a leaf or not.
- */
-Node::Node(vector<Node *> children, vector<Rectangle> rectangles,
-           bool is_leaf) {
-    this->children = children;
-    this->rectangles = rectangles;
-    this->is_leaf = is_leaf;
-    this->MBR = computeMBR(rectangles);
-}
-
-/**
- * @brief Prints the node to stdout: the MBR, whether it is a leaf or not, and
- * the number of children.
- */
-void Node::print() {
-    cout << "Node(MBR=(" << this->MBR.bottom_left.x << ", "
-         << this->MBR.bottom_left.y << "), (" << this->MBR.top_right.x << ", "
-         << this->MBR.top_right.y << "), is_leaf=" << this->is_leaf
-         << ", num_children=" << this->children.size() << ")" << endl;
-}
-
-/**
  * @brief Gets the height of the RTree.
  * @return The height of the RTree.
  */
@@ -104,6 +66,7 @@ void RTree::setNodesLocation(string nodes_file) {
  * @brief Saves the nodes of the RTree to the nodes file.
  * If the nodes file does not exist, it is created, otherwise it is overwritten.
  * If the nodes file is not set, an error is thrown.
+ *
  */
 void RTree::saveNodesToDisk() {
     if (this->nodes_file == "") {
@@ -189,48 +152,32 @@ NodeData RTree::readNode(long long offset) {
 }
 
 /**
- * Creates a new RTree object with the given maximum number of entries per
- * node, containing the rectangles closest to the origin point.
+ * @brief Creates a new RTree object with the given maximum number of entries
+ * per node, containing the rectangles closest to the origin point.
  *
  * @param M The maximum number of entries per node.
  * @param rectangles The list of rectangles to insert into the RTree.
+ * @param algorithm The algorithm to use to build the RTree.
  * @return A new RTree object containing the closest rectangles.
  */
-RTree RTree::fromNearestX(int M, vector<Rectangle> rectangles) {
-    Node *root = nearestX(M, rectangles);
-    cout << "Root: " << endl;
-    root->print();
-    return RTree(M, root, true);
-}
+RTree RTree::bulkLoad(int M, vector<Rectangle> rectangles,
+                      BulkLoadingAlgorithm algorithm) {
+    Node *bulkLoadResultRoot;
+    switch (algorithm) {
+    case NearestX:
+        bulkLoadResultRoot = nearestX(M, rectangles);
+        break;
+    case HilbertCurve:
+        bulkLoadResultRoot = hilbertCurve(M, rectangles);
+        break;
+    case SortTileRecursive:
+        bulkLoadResultRoot = sortTileRecursive(M, rectangles);
+        break;
+    default:
+        throw "Invalid algorithm";
+    }
 
-/**
- * @brief Creates an RTree from a set of rectangles using the Hilbert
- Curve
- * algorithm.
- *
- * @param M The maximum number of entries per node.
- * @param rectangles The set of rectangles to be inserted into the RTree.
- * @return RTree The resulting RTree.
- */
-RTree RTree::fromHilbertCurve(int M, vector<Rectangle> rectangles) {
-    Node *root = hilbertCurve(M, rectangles);
     cout << "Root: " << endl;
-    root->print();
-    return RTree(M, root, true);
-}
-
-/**
- * @brief Constructs an RTree recursively using the Sort-Tile-Recursive
- * algorithm.
- *
- * @param M The maximum number of entries per node.
- * @param rectangles A vector of rectangles to be inserted into the
- RTree.
- * @return RTree The constructed RTree.
- */
-RTree RTree::fromSortTileRecursive(int M, vector<Rectangle> rectangles) {
-    Node *root = sortTileRecursive(M, rectangles);
-    cout << "Root: " << endl;
-    root->print();
-    return RTree(M, root, true);
+    bulkLoadResultRoot->print();
+    return RTree(M, bulkLoadResultRoot, true);
 }
