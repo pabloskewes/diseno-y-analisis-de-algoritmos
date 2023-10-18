@@ -14,7 +14,7 @@ void optimize() {
     std::cin.tie(NULL);
 }
 
-void generate_R_sets() {
+void generateInputRectagles(int power) {
     int first_power = 10;
     int last_power = 25;
     for (int i = first_power; i <= last_power; i++) {
@@ -89,21 +89,6 @@ int main() {
     int M = calculate_M(B, node_size, child_size);
 
     cout << "M=" << M << endl;
-
-    createAndSaveRTrees(M);
-
-    // Rectangle rectangle = {{10000, 10000}, {100000, 100000}};
-
-    // cout << "Querying rectangle: " << endl;
-    // print_rectangle(rectangle);
-
-    // vector<Rectangle> result = rtree.query(rectangle);
-
-    // cout << "Result size: " << result.size() << endl;
-    // cout << "Results: " << endl;
-    // for (int i = 0; i < result.size(); i++) {
-    //     print_rectangle(result[i]);
-    // }
 
     return 0;
 }

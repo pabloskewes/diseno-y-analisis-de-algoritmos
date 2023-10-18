@@ -82,3 +82,30 @@ void generate_input_samples(int power) {
 
     write_rectangles_to_file(rects, filename);
 }
+
+/**
+ * Generates a sample of query rectangles and writes them to a file. (Set Q)
+ */
+void generateQueryRectangles() {
+    int total_queries = 100;
+    Point bottom_left_bound = {0, 0};
+    Point top_right_bound = {500000, 500000};
+    double min_side_length = 0;
+    double max_side_length = 100000;
+    string filename = "data/rectangles/query.txt";
+
+    cout << "Generating " << total_queries << " random rectangles with side "
+         << "lengths between " << min_side_length << " and " << max_side_length
+         << endl
+         << "and within the bounds (" << bottom_left_bound.x << ", "
+         << bottom_left_bound.y << ") and (" << top_right_bound.x << ", "
+         << top_right_bound.y << ")" << endl;
+
+    vector<Rectangle> rects = generate_random_rectangles(
+        total_queries, bottom_left_bound, top_right_bound, min_side_length,
+        max_side_length, true);
+
+    cout << "Generated " << rects.size() << " rectangles." << endl;
+
+    write_rectangles_to_file(rects, filename);
+}
