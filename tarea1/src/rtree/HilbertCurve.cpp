@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <tuple>
+#include <cmath> // log2
 
 using namespace std;
 
@@ -119,8 +120,8 @@ Node* _hilbertCurve(int M, vector<Node *> nodes) {
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     cout << "Creating RTree with hilbertCurve" << endl;
-
-    int order = 10;
+    
+    int order = log2(rectangles.size());
     Point minPoint = {0, 0};
     Point maxPoint = {500000, 500000};
 
