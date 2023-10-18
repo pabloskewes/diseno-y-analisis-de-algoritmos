@@ -40,9 +40,21 @@ RTree generate_nearest_x_binary(int power, int M) {
 
     cout << "Height: " << rtree1.getHeight() << endl;
 
-    string output_file = "data/btrees/nearestx_" + to_string(power) + ".bin";
-    rtree1.setNodesLocation(output_file);
-    rtree1.saveNodesToDisk();
+    cout << "Computing nodes offset..." << endl;
+
+    rtree1.computeNodesOffset();
+
+    // cout << "Printing offsets..." << endl;
+
+    // cout << "Root offset: " << rtree1.root->offset << endl;
+    // cout << "Root children offsets: " << endl;
+    // for (Node *child : rtree1.root->children) {
+    //     cout << child->offset << endl;
+    // }
+
+    // string output_file = "data/btrees/nearestx_" + to_string(power) + ".bin";
+    // rtree1.setNodesLocation(output_file);
+    // rtree1.saveNodesToDisk();
 
     return rtree1;
 }
@@ -70,19 +82,19 @@ int main() {
     int power = 17;
 
     RTree rtree1 = generate_nearest_x_binary(power, M);
-    NodeData root = rtree1.readNode(0);
-    cout << "Root: " << endl;
-    cout << "Offset: " << root.offset << endl;
-    cout << "Is leaf: " << root.is_leaf << endl;
-    cout << "Rectangles: " << endl;
-    for (Rectangle rectangle : root.rectangles) {
-        cout << rectangle.bottom_left.x << " " << rectangle.bottom_left.y << " "
-             << rectangle.top_right.x << " " << rectangle.top_right.y << endl;
-    }
-    cout << "Children offsets: " << endl;
-    for (long long child_offset : root.children_offsets) {
-        cout << child_offset << endl;
-    }
+    // NodeData root = rtree1.readNode(0);
+    // cout << "Root: " << endl;
+    // cout << "Offset: " << root.offset << endl;
+    // cout << "Is leaf: " << root.is_leaf << endl;
+    // cout << "Rectangles: " << endl;
+    // for (Rectangle rectangle : root.rectangles) {
+    //     cout << rectangle.bottom_left.x << " " << rectangle.bottom_left.y << " "
+    //          << rectangle.top_right.x << " " << rectangle.top_right.y << endl;
+    // }
+    // cout << "Children offsets: " << endl;
+    // for (long long child_offset : root.children_offsets) {
+    //     cout << child_offset << endl;
+    // }
 
     return 0;
 }

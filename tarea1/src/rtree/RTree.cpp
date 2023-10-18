@@ -62,94 +62,23 @@ void RTree::setNodesLocation(string nodes_file) {
     this->nodes_file = nodes_file;
 }
 
-/**
- * @brief Saves the nodes of the RTree to the nodes file.
- * If the nodes file does not exist, it is created, otherwise it is overwritten.
- * If the nodes file is not set, an error is thrown.
- *
- */
-void RTree::saveNodesToDisk() {
-    if (this->nodes_file == "") {
-        throw "Nodes file not set";
+long long _computeNodesOffset(Node *node, long long offset) {
+    cout << "offset: " << offset << endl;
+    node->offset = offset;
+    offset += node->diskSize();
+    for (int i = 0; i < node->children.size(); i++) {
+        offset = _computeNodesOffset(node->children[i], offset);
     }
-    ofstream nodes_stream(this->nodes_file, ios::binary);
-    if (!nodes_stream.is_open()) {
-        throw "Could not open nodes file";
-    }
-    vector<NodeData> nodes_data;
-    vector<Node *> nodes;
-    nodes.push_back(this->root);
-    while (!nodes.empty()) {
-        Node *node = nodes.back();
-        nodes.pop_back();
-        NodeData node_data;
-        node_data.offset = nodes_stream.tellp();
-        node_data.is_leaf = node->is_leaf;
-        node_data.rectangles = node->rectangles;
-        for (Node *child : node->children) {
-            if (child != nullptr) {
-                node_data.children_offsets.push_back(nodes_stream.tellp());
-                nodes.push_back(child);
-            } else {
-                node_data.children_offsets.push_back(-1);
-            }
-        }
-        nodes_data.push_back(node_data);
-    }
-    for (NodeData node_data : nodes_data) {
-        nodes_stream.write((char *)&node_data.offset, sizeof(long long));
-        nodes_stream.write((char *)&node_data.is_leaf, sizeof(bool));
-        int num_rectangles = node_data.rectangles.size();
-        nodes_stream.write((char *)&num_rectangles, sizeof(int));
-        for (Rectangle rectangle : node_data.rectangles) {
-            nodes_stream.write((char *)&rectangle.bottom_left.x,
-                               sizeof(long long));
-            nodes_stream.write((char *)&rectangle.bottom_left.y,
-                               sizeof(long long));
-            nodes_stream.write((char *)&rectangle.top_right.x,
-                               sizeof(long long));
-            nodes_stream.write((char *)&rectangle.top_right.y,
-                               sizeof(long long));
-        }
-        for (long long child_offset : node_data.children_offsets) {
-            nodes_stream.write((char *)&child_offset, sizeof(long long));
-        }
-    }
-    nodes_stream.close();
+    return offset;
 }
 
 /**
- * @brief Reads a node from the nodes file.
- * @param offset The offset of the node in the nodes file.
- * @return NodeData The node data struct read from the nodes file.
+ * @brief Computes the offset of each node in the file.
  */
-NodeData RTree::readNode(long long offset) {
-    ifstream nodes_stream(this->nodes_file, ios::binary);
-    if (!nodes_stream.is_open()) {
-        throw "Could not open nodes file";
-    }
-    nodes_stream.seekg(offset);
-    NodeData node_data;
-    nodes_stream.read((char *)&node_data.offset, sizeof(long long));
-    nodes_stream.read((char *)&node_data.is_leaf, sizeof(bool));
-    int num_rectangles;
-    nodes_stream.read((char *)&num_rectangles, sizeof(int));
-    for (int i = 0; i < num_rectangles; i++) {
-        Rectangle rectangle;
-        nodes_stream.read((char *)&rectangle.bottom_left.x, sizeof(long long));
-        nodes_stream.read((char *)&rectangle.bottom_left.y, sizeof(long long));
-        nodes_stream.read((char *)&rectangle.top_right.x, sizeof(long long));
-        nodes_stream.read((char *)&rectangle.top_right.y, sizeof(long long));
-        node_data.rectangles.push_back(rectangle);
-    }
-    for (int i = 0; i < this->M; i++) {
-        long long child_offset;
-        nodes_stream.read((char *)&child_offset, sizeof(long long));
-        node_data.children_offsets.push_back(child_offset);
-    }
-    nodes_stream.close();
-    return node_data;
+void RTree::computeNodesOffset() {
+    _computeNodesOffset(this->root, 0);
 }
+
 
 /**
  * @brief Creates a new RTree object with the given maximum number of entries

@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 enum BulkLoadingAlgorithm {
     NearestX,
     HilbertCurve,
@@ -37,8 +36,8 @@ class RTree {
     void sayHello();
     int getHeight();
     void setNodesLocation(string nodes_file);
-    void saveNodesToDisk();
-    NodeData readNode(long long offset);
+
+    void computeNodesOffset();
 
     static RTree bulkLoad(int M, vector<Rectangle> rectangles,
                           BulkLoadingAlgorithm algorithm);
