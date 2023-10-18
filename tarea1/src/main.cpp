@@ -104,7 +104,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
     vector<vector<int>> reads;
 
     // For each 2^i
-    for (int i = 10; i <= 22; i++) {
+    for (int i = 10; i <= 25; i++) {
         cout << "Running for 2^" << i << endl;
         string nodesFile =
             "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
