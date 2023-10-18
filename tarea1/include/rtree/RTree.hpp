@@ -39,9 +39,10 @@ class RTree {
     int getHeight();
 
     void computeNodesOffset();
+    void writeNodesToDisk(string file);
+    bool checkNodesInMemoryEqualNodesInDisk();
 
-    void setNodesLocation(string nodes_file);
-    void saveNodesToDisk();
+    NodeData readNodeFromDisk(long long offset);
 };
 
 #endif

@@ -26,37 +26,43 @@ int calculate_M(int B, int node_size, int child_size) {
     return (B - node_size) / child_size;
 }
 
-RTree generate_nearest_x_binary(int power, int M) {
+RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
     string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
 
     cout << "Number of rectangles: " << rectangles.size() << endl;
 
     cout << "Building R-tree..." << endl;
-    RTree rtree1 = RTree::bulkLoad(M, rectangles, BulkLoadingAlgorithm::NearestX);
+    RTree rtree = RTree::bulkLoad(M, rectangles, algorithm);
 
     cout << "Printing root node..." << endl;
-    rtree1.root->print();
+    rtree.root->print();
 
-    cout << "Height: " << rtree1.getHeight() << endl;
+    cout << "Height: " << rtree.getHeight() << endl;
 
     cout << "Computing nodes offset..." << endl;
 
-    rtree1.computeNodesOffset();
+    rtree.computeNodesOffset();
 
-    // cout << "Printing offsets..." << endl;
+    string base_name = "data/btrees/";
+    switch (algorithm) {
+    case NearestX:
+        base_name += "nearest_x/";
+        break;
+    case HilbertCurve:
+        base_name += "hilbert_curve/";
+        break;
+    case SortTileRecursive:
+        base_name += "sort_tile_recursive/";
+        break;
+    default:
+        throw "Invalid algorithm";
+    }
 
-    // cout << "Root offset: " << rtree1.root->offset << endl;
-    // cout << "Root children offsets: " << endl;
-    // for (Node *child : rtree1.root->children) {
-    //     cout << child->offset << endl;
-    // }
+    string file_name = base_name + "pow_" + to_string(power) + ".bin";
+    rtree.writeNodesToDisk(file_name);
 
-    // string output_file = "data/btrees/nearestx_" + to_string(power) + ".bin";
-    // rtree1.setNodesLocation(output_file);
-    // rtree1.saveNodesToDisk();
-
-    return rtree1;
+    return rtree;
 }
 
 int main() {
@@ -65,11 +71,10 @@ int main() {
     // Computing right size for M
     int B = 4096; // 4KB: block size
 
-    int node_size =
-        sizeof(bool) + // 1 byte for is_leaf
-        sizeof(long long) + // 8 bytes for offset
-        sizeof(int) +        // 4 bytes for num_rectangles
-        sizeof(int);       // 4 bytes for num_children
+    int node_size = sizeof(bool) +      // 1 byte for is_leaf
+                    sizeof(long long) + // 8 bytes for offset
+                    sizeof(int) +       // 4 bytes for num_rectangles
+                    sizeof(int);        // 4 bytes for num_children
 
     int child_size =
         sizeof(Rectangle) +
@@ -81,20 +86,14 @@ int main() {
 
     int power = 17;
 
-    RTree rtree1 = generate_nearest_x_binary(power, M);
-    // NodeData root = rtree1.readNode(0);
-    // cout << "Root: " << endl;
-    // cout << "Offset: " << root.offset << endl;
-    // cout << "Is leaf: " << root.is_leaf << endl;
-    // cout << "Rectangles: " << endl;
-    // for (Rectangle rectangle : root.rectangles) {
-    //     cout << rectangle.bottom_left.x << " " << rectangle.bottom_left.y << " "
-    //          << rectangle.top_right.x << " " << rectangle.top_right.y << endl;
-    // }
-    // cout << "Children offsets: " << endl;
-    // for (long long child_offset : root.children_offsets) {
-    //     cout << child_offset << endl;
-    // }
+    RTree rtree = saveBtreeBin(power, NearestX, M);
+    bool success = rtree.checkNodesInMemoryEqualNodesInDisk();
+
+    if (success) {
+        cout << "Nodes in memory and in disk are equal" << endl;
+    } else {
+        cout << "Nodes in memory and in disk are not equal" << endl;
+    }
 
     return 0;
 }
