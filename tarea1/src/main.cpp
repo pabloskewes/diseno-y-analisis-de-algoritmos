@@ -26,45 +26,79 @@ int calculate_M(int B, int node_size, int child_size) {
     return (B - node_size) / child_size;
 }
 
-int main() {
-    optimize();
-
-    int B = 4096; // 4KB: block size
-    int node_size = sizeof(bool) +
-                    sizeof(long long); // 1 byte for is_leaf, 8 bytes for offset
-    int child_size =
-        sizeof(Rectangle) +
-        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
-    int M = calculate_M(B, node_size, child_size);
-
-    cout << "M=" << M << endl;
-
-    // test_intersect();
-    // test_generate_random_rects();
-    // test_generate_random_rects_massive(std::pow(2, 20));
-    // test_write_and_read_rects(100);
-    // test_computeMBR();
-    // generate_R_sets();
-    int power = 24;
-
+RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
     string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
 
     cout << "Number of rectangles: " << rectangles.size() << endl;
-    // print first 5 rectangles
-    for (int i = 0; i < 5; i++) {
-        print_rectangle(rectangles[i]);
-    }
 
     cout << "Building R-tree..." << endl;
-    // RTree rtree1 = RTree::fromNearestX(M, rectangles);
-    // hilbert tree
-    RTree rtree1 = RTree::fromSortTileRecursive(M, rectangles);
+    RTree rtree = RTree::bulkLoad(M, rectangles, algorithm);
 
     cout << "Printing root node..." << endl;
-    rtree1.root->print();
+    rtree.root->print();
 
-    cout << "Height: " << rtree1.getHeight() << endl;
+    cout << "Height: " << rtree.getHeight() << endl;
+
+    cout << "Computing nodes offset..." << endl;
+
+    rtree.computeNodesOffset();
+
+    string base_name = "data/btrees/";
+    switch (algorithm) {
+    case NearestX:
+        base_name += "nearest_x/";
+        break;
+    case HilbertCurve:
+        base_name += "hilbert_curve/";
+        break;
+    case SortTileRecursive:
+        base_name += "sort_tile_recursive/";
+        break;
+    default:
+        throw "Invalid algorithm";
+    }
+
+    string file_name = base_name + "pow_" + to_string(power) + ".bin";
+    rtree.writeNodesToDisk(file_name);
+
+    return rtree;
+}
+
+int main() {
+    optimize();
+
+    // Computing right size for M
+    int B = 4096; // 4KB: block size
+
+    int node_size = sizeof(bool) +      // 1 byte for is_leaf
+                    sizeof(long long) + // 8 bytes for offset
+                    sizeof(int) +       // 4 bytes for num_rectangles
+                    sizeof(int);        // 4 bytes for num_children
+
+    int child_size =
+        sizeof(Rectangle) +
+        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
+
+    int M = calculate_M(B, node_size, child_size);
+
+    cout << "M=" << M << endl;
+
+    int power = 17;
+
+    RTree rtree = RTree::loadFromDisk(M, "data/btrees/nearest_x/pow_17.bin");
+    Rectangle rectangle = {{10000, 10000}, {100000, 100000}};
+
+    cout << "Querying rectangle: " << endl;
+    print_rectangle(rectangle);
+
+    vector<Rectangle> result = rtree.query(rectangle);
+
+    cout << "Result size: " << result.size() << endl;
+    cout << "Results: " << endl;
+    for (int i = 0; i < result.size(); i++) {
+        print_rectangle(result[i]);
+    }
 
     return 0;
 }

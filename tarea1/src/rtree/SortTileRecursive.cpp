@@ -164,4 +164,5 @@ Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
     }
 
     return _sortTileRecursive(M, leafs, S);
+
 }

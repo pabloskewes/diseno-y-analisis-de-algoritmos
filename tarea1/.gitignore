@@ -12,5 +12,7 @@ bin/
 
 # Data
 data/rectangles/*.txt
-data/btree/*.bin
+data/btrees/nearest_x/*.bin
+data/btrees/hilbert_curve/*.bin
+data/btrees/sort_tile_recursive/*.bin
 data/results/*.txt

@@ -15,6 +15,7 @@ add_executable(
 
     # RTree
     src/rtree/RTree.cpp
+    src/rtree/Node.cpp
     src/rtree/NearestX.cpp
     src/rtree/HilbertCurve.cpp
     src/rtree/SortTileRecursive.cpp
