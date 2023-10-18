@@ -19,7 +19,7 @@ enum BulkLoadingAlgorithm {
  * @brief A class representing an R-tree.
  * @param root The root of the R-tree.
  * @param M The maximum number of entries per node.
- * @param file The file where the R-tree stores its nodes.
+ * @param nodes_file The file where the R-tree stores its nodes.
  * @param tree_loaded Whether the tree is loaded in memory or not.
  * @param nodes_in_disk Whether the nodes are stored in the disk or not.
  */
