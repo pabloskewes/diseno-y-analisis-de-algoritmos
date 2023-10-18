@@ -65,6 +65,18 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
     return rtree;
 }
 
+void createAndSaveRTrees(int M) {
+    int first_power = 10;
+    int last_power = 25;
+
+    for (int i = first_power; i <= last_power; i++) {
+        for (BulkLoadingAlgorithm algorithm :
+             {NearestX, HilbertCurve, SortTileRecursive}) {
+            saveBtreeBin(i, algorithm, M);
+        }
+    }
+}
+
 int main() {
     optimize();
 
@@ -84,21 +96,20 @@ int main() {
 
     cout << "M=" << M << endl;
 
-    int power = 17;
+    createAndSaveRTrees(M);
 
-    RTree rtree = RTree::loadFromDisk(M, "data/btrees/nearest_x/pow_17.bin");
-    Rectangle rectangle = {{10000, 10000}, {100000, 100000}};
+    // Rectangle rectangle = {{10000, 10000}, {100000, 100000}};
 
-    cout << "Querying rectangle: " << endl;
-    print_rectangle(rectangle);
+    // cout << "Querying rectangle: " << endl;
+    // print_rectangle(rectangle);
 
-    vector<Rectangle> result = rtree.query(rectangle);
+    // vector<Rectangle> result = rtree.query(rectangle);
 
-    cout << "Result size: " << result.size() << endl;
-    cout << "Results: " << endl;
-    for (int i = 0; i < result.size(); i++) {
-        print_rectangle(result[i]);
-    }
+    // cout << "Result size: " << result.size() << endl;
+    // cout << "Results: " << endl;
+    // for (int i = 0; i < result.size(); i++) {
+    //     print_rectangle(result[i]);
+    // }
 
     return 0;
 }
