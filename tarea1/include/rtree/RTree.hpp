@@ -33,14 +33,15 @@ class RTree {
 
     RTree(int M, Node *root, bool tree_loaded);
 
-    void sayHello();
+    static RTree bulkLoad(int M, vector<Rectangle> rectangles,
+                          BulkLoadingAlgorithm algorithm);
+
     int getHeight();
-    void setNodesLocation(string nodes_file);
 
     void computeNodesOffset();
 
-    static RTree bulkLoad(int M, vector<Rectangle> rectangles,
-                          BulkLoadingAlgorithm algorithm);
+    void setNodesLocation(string nodes_file);
+    void saveNodesToDisk();
 };
 
 #endif

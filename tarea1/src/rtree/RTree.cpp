@@ -13,24 +13,6 @@ using namespace std;
 namespace fs = std::filesystem;
 
 /**
- * @brief Gets the height of the RTree.
- * @return The height of the RTree.
- */
-int RTree::getHeight() {
-    if (!this->tree_loaded) {
-        cout << "Tree not loaded" << endl;
-        return -1;
-    }
-    int height = 0;
-    Node *node = this->root;
-    while (!node->is_leaf) {
-        height++;
-        node = node->children[0];
-    }
-    return height;
-}
-
-/**
  * @brief Constructs a new RTree object with the given maximum number of
  * entries per node.
  * @param M The maximum number of entries per node.
@@ -49,36 +31,6 @@ RTree::RTree(int M, Node *root, bool tree_loaded) {
         this->nodes_in_disk = false;
     }
 }
-
-void RTree::sayHello() {
-    cout << "Hello from Rtree!" << endl;
-}
-
-/**
- * @brief Sets the location of the nodes file.
- * @param nodes_file The location of the nodes file.
- */
-void RTree::setNodesLocation(string nodes_file) {
-    this->nodes_file = nodes_file;
-}
-
-long long _computeNodesOffset(Node *node, long long offset) {
-    cout << "offset: " << offset << endl;
-    node->offset = offset;
-    offset += node->diskSize();
-    for (int i = 0; i < node->children.size(); i++) {
-        offset = _computeNodesOffset(node->children[i], offset);
-    }
-    return offset;
-}
-
-/**
- * @brief Computes the offset of each node in the file.
- */
-void RTree::computeNodesOffset() {
-    _computeNodesOffset(this->root, 0);
-}
-
 
 /**
  * @brief Creates a new RTree object with the given maximum number of entries
@@ -109,4 +61,47 @@ RTree RTree::bulkLoad(int M, vector<Rectangle> rectangles,
     cout << "Root: " << endl;
     bulkLoadResultRoot->print();
     return RTree(M, bulkLoadResultRoot, true);
+}
+
+/**
+ * @brief Gets the height of the RTree.
+ * @return The height of the RTree.
+ */
+int RTree::getHeight() {
+    if (!this->tree_loaded) {
+        cout << "Tree not loaded" << endl;
+        return -1;
+    }
+    int height = 0;
+    Node *node = this->root;
+    while (!node->is_leaf) {
+        height++;
+        node = node->children[0];
+    }
+    return height;
+}
+
+long long _computeNodesOffset(Node *node, long long offset) {
+    cout << "offset: " << offset << endl;
+    node->offset = offset;
+    offset += node->diskSize();
+    for (int i = 0; i < node->children.size(); i++) {
+        offset = _computeNodesOffset(node->children[i], offset);
+    }
+    return offset;
+}
+
+/**
+ * @brief Computes the offset of each node in the file.
+ */
+void RTree::computeNodesOffset() {
+    _computeNodesOffset(this->root, 0);
+}
+
+/**
+ * @brief Sets the location of the nodes file.
+ * @param nodes_file The location of the nodes file.
+ */
+void RTree::setNodesLocation(string nodes_file) {
+    this->nodes_file = nodes_file;
 }
