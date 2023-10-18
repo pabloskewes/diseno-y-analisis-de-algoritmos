@@ -9,8 +9,6 @@
 
 using namespace std;
 
-int recursionStep = 0;
-
 /**
  * @brief Recursively groups nodes into a single root node, where each node has
  * M children.
@@ -19,8 +17,6 @@ int recursionStep = 0;
  * @return The root node of the RTree.
  */
 Node *_nearestX(int M, vector<Node *> nodes) {
-
-    cout << "NearestX recursion step " << recursionStep++ << endl;
 
     // Iterate over nodes and group them into new nodes
     vector<Node *> new_nodes;
@@ -38,7 +34,6 @@ Node *_nearestX(int M, vector<Node *> nodes) {
 
     // If there is only one node, return it
     if (new_nodes.size() == 1) {
-        new_nodes[0]->print();
         return new_nodes[0];
     } else {
         return _nearestX(M, new_nodes);
@@ -63,8 +58,6 @@ Node *_nearestX(int M, vector<Node *> nodes) {
  * can be grouped into a single root node.
  */
 Node *nearestX(int M, vector<Rectangle> rectangles) {
-    cout << "Creating RTree with NearestX algorithm..." << endl;
-
     // Create tuple with center of each rectangle
     vector<tuple<Rectangle, Point>> tuples;
     for (Rectangle rect : rectangles) { // O(n)

@@ -3,10 +3,10 @@
 #include "rtree/RTree.hpp"
 
 #include <algorithm>
+#include <cmath> // log2
 #include <fstream>
 #include <iostream>
 #include <tuple>
-#include <cmath> // log2
 
 using namespace std;
 
@@ -31,7 +31,6 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
         *y = temp;
     }
 }
-
 
 /**
  * @brief Calculates the Hilbert value of a point.
@@ -60,8 +59,6 @@ int hilbertValue(Point point, int order, Point minPoint, Point maxPoint) {
     return hilbertVal;
 }
 
-int recursionHilbertStep = 0;
-
 /**
  * @brief Recursively groups nodes into a single root node, where each node
  has
@@ -71,12 +68,7 @@ int recursionHilbertStep = 0;
  * @return The root node of the RTree.
  */
 
-Node* _hilbertCurve(int M, vector<Node *> nodes) {
-    cout << "HilbertCurve" << endl;
-    cout << "Recursion step: " << recursionHilbertStep << endl;
-
-    recursionHilbertStep++;
-
+Node *_hilbertCurve(int M, vector<Node *> nodes) {
     // Iterate over nodes and group them into new nodes
     vector<Node *> new_nodes;
     for (int i = 0; i < nodes.size(); i += M) { // O(n)
@@ -93,13 +85,11 @@ Node* _hilbertCurve(int M, vector<Node *> nodes) {
 
     // If there is only one node, return it
     if (new_nodes.size() == 1) {
-        new_nodes[0]->print();
         return new_nodes[0];
     } else {
         return _hilbertCurve(M, new_nodes);
     }
 }
-
 
 /**
  * @brief Uses the hilbertCurve algorithm build the root node of the RTree.
@@ -119,9 +109,8 @@ Node* _hilbertCurve(int M, vector<Node *> nodes) {
  * iteration can be grouped into a single root node.
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
-    cout << "Creating RTree with hilbertCurve" << endl;
-    
-    int order = log2(rectangles.size());
+    // Calculate order of Hilbert curve
+    int order = ceil(log2(rectangles.size()));
     Point minPoint = {0, 0};
     Point maxPoint = {500000, 500000};
 
@@ -131,14 +120,16 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
         Point center = middle_point(rect);
         int hilbertVal = hilbertValue(center, order, minPoint, maxPoint); //
         // Adjust the order as needed tuple
-        tuple<Rectangle, Point, int> tuple = make_tuple(rect, center, hilbertVal); 
+        tuple<Rectangle, Point, int> tuple =
+            make_tuple(rect, center, hilbertVal);
         tuples.push_back(tuple);
     }
 
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)
         tuples.begin(), tuples.end(),
-        [](const tuple<Rectangle, Point, int> &a, const tuple<Rectangle, Point, int> &b) {
+        [](const tuple<Rectangle, Point, int> &a,
+           const tuple<Rectangle, Point, int> &b) {
             return get<2>(a) < get<2>(b);
         });
 

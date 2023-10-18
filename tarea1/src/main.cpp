@@ -30,17 +30,10 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
     string sample_file = "data/rectangles/input_" + to_string(power) + ".txt";
     vector<Rectangle> rectangles = read_rectangles_from_file(sample_file);
 
-    cout << "Number of rectangles: " << rectangles.size() << endl;
-
-    cout << "Building R-tree..." << endl;
+    cout << "POW: " << power << endl;
+    cout << "ALG: " << algorithm << endl;
+    cout << "Bulk loading..." << endl;
     RTree rtree = RTree::bulkLoad(M, rectangles, algorithm);
-
-    cout << "Printing root node..." << endl;
-    rtree.root->print();
-
-    cout << "Height: " << rtree.getHeight() << endl;
-
-    cout << "Computing nodes offset..." << endl;
 
     rtree.computeNodesOffset();
 
@@ -59,6 +52,7 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
         throw "Invalid algorithm";
     }
 
+    cout << "Writing to disk..." << endl;
     string file_name = base_name + "pow_" + to_string(power) + ".bin";
     rtree.writeNodesToDisk(file_name);
 
@@ -67,7 +61,7 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
 
 void createAndSaveRTrees(int M) {
     int first_power = 10;
-    int last_power = 25;
+    int last_power = 22;
 
     for (int i = first_power; i <= last_power; i++) {
         for (BulkLoadingAlgorithm algorithm :

@@ -10,8 +10,6 @@
 
 using namespace std;
 
-int recursionStepSortTileRecursive = 0;
-
 /**
  * @brief Recursively groups nodes into a single root node, where each node has
  * M children.
@@ -21,9 +19,6 @@ int recursionStepSortTileRecursive = 0;
  * @return The root node of the RTree.
  */
 Node *_sortTileRecursive(int M, vector<Node *> nodes, int S) {
-
-    cout << "Sort-Tile-Recursive recursion step "
-         << recursionStepSortTileRecursive++ << endl;
 
     int n = nodes.size();
 
@@ -51,7 +46,7 @@ Node *_sortTileRecursive(int M, vector<Node *> nodes, int S) {
     }
 
     // Create nodes from each group (S*S nodes)
-    vector<Node *> new_nodes;  
+    vector<Node *> new_nodes;
     for (int i = 0; i < groups2.size(); i++) { // O(n)
         for (int j = 0; j < groups2[i].size(); j++) {
             vector<Node *> children;
@@ -68,14 +63,10 @@ Node *_sortTileRecursive(int M, vector<Node *> nodes, int S) {
 
     // If there is only one node, return it
     if (new_nodes.size() == 1) {
-        cout << "Root node:" << endl;
-        new_nodes[0]->print();
         return new_nodes[0];
     } else {
         return _sortTileRecursive(M, new_nodes, S);
     }
-
-
 }
 /**
  * @brief Uses the Sort-Tile-Recursive algorithm build the root node of the
@@ -94,8 +85,6 @@ Node *_sortTileRecursive(int M, vector<Node *> nodes, int S) {
  * number of nodes until they can all be joined into a single root node.
  */
 Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
-    cout << "Creating RTree with Sort-Tile-Recursive algorithm..." << endl;
-
     int n = rectangles.size();
     int S = (int)ceil(sqrt(n / M));
 
@@ -164,5 +153,4 @@ Node *sortTileRecursive(int M, vector<Rectangle> rectangles) {
     }
 
     return _sortTileRecursive(M, leafs, S);
-
 }

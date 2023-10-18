@@ -58,8 +58,6 @@ RTree RTree::bulkLoad(int M, vector<Rectangle> rectangles,
         throw "Invalid algorithm";
     }
 
-    cout << "Root: " << endl;
-    bulkLoadResultRoot->print();
     return RTree(M, bulkLoadResultRoot, true);
 }
 
