@@ -250,8 +250,9 @@ bool RTree::checkNodesInMemoryEqualNodesInDisk() {
 }
 
 void _query(RTree *rtree, long long offset, Rectangle query_rect,
-            vector<Rectangle> &result, ifstream &input_file) {
+            vector<Rectangle> &result, ifstream &input_file, int *readCounter) {
     NodeData node_data = rtree->readNodeFromDisk(offset);
+    *readCounter += 1;
 
     if (node_data.is_leaf) {
         for (int i = 0; i < node_data.rectangles.size(); i++) {
@@ -265,7 +266,7 @@ void _query(RTree *rtree, long long offset, Rectangle query_rect,
             Rectangle rectangle = node_data.rectangles[i];
             if (intersects(rectangle, query_rect)) {
                 _query(rtree, node_data.children_offsets[i], query_rect, result,
-                       input_file);
+                       input_file, readCounter);
             }
         }
     }
@@ -275,9 +276,10 @@ void _query(RTree *rtree, long long offset, Rectangle query_rect,
  * @brief Queries the RTree for the rectangles that intersect with the given
  * rectangle. The query is done in disk.
  * @param rectangle The rectangle to query.
+ * @param read_count Pointer to a variable that will store the number of reads
  * @return The rectangles that intersect with the given rectangle.
  */
-vector<Rectangle> RTree::query(Rectangle rectangle) {
+vector<Rectangle> RTree::query(Rectangle rectangle, int *read_count) {
     if (!this->nodes_in_disk) {
         throw "Nodes not in disk";
     }
@@ -289,7 +291,7 @@ vector<Rectangle> RTree::query(Rectangle rectangle) {
         throw "Could not open file";
     }
 
-    _query(this, 0, rectangle, result, input_file);
+    _query(this, 0, rectangle, result, input_file, read_count);
 
     input_file.close();
 

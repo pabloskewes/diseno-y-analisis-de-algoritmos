@@ -45,7 +45,7 @@ class RTree {
 
     NodeData readNodeFromDisk(long long offset);
 
-    vector<Rectangle> query(Rectangle rectangle);
+    vector<Rectangle> query(Rectangle rectangle, int *readCounter);
 };
 
 #endif

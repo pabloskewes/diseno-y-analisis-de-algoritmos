@@ -3,6 +3,7 @@
 #include "rectangle/test_rectangle.hpp"
 #include "rtree/RTree.hpp"
 
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <random>
@@ -12,6 +13,10 @@ using namespace std;
 void optimize() {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(NULL);
+}
+
+void disableCache() {
+    system("echo 3 | sudo tee /proc/sys/vm/drop_caches");
 }
 
 void generateInputRectagles(int power) {
@@ -71,6 +76,78 @@ void createAndSaveRTrees(int M) {
     }
 }
 
+void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
+    vector<Rectangle> Q =
+        read_rectangles_from_file("data/rectangles/query.txt");
+
+    string algorithm_name;
+    switch (algorithm) {
+    case NearestX:
+        algorithm_name = "nearest_x";
+        break;
+    case HilbertCurve:
+        algorithm_name = "hilbert_curve";
+        break;
+    case SortTileRecursive:
+        algorithm_name = "sort_tile_recursive";
+        break;
+    default:
+        throw "Invalid algorithm";
+    }
+
+    cout << "Running " << algorithm_name << endl;
+
+    string timesOutputFile = "data/results/times_" + algorithm_name + ".csv";
+    string readsOutputFile = "data/results/reads_" + algorithm_name + ".csv";
+
+    vector<vector<long long>> times;
+    vector<vector<int>> reads;
+
+    // For each 2^i
+    for (int i = 10; i <= 22; i++) {
+        cout << "Running for 2^" << i << endl;
+        string nodesFile =
+            "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
+        RTree rtree = RTree::loadFromDisk(M, nodesFile);
+
+        vector<long long> timesForPow;
+        vector<int> readsForPow;
+        // For each q in Q
+        for (int j = 0; j < Q.size(); j++) {
+            int readCounter = 0;
+            auto start = chrono::high_resolution_clock::now();
+
+            vector<Rectangle> result = rtree.query(Q[j], &readCounter);
+
+            auto end = chrono::high_resolution_clock::now();
+            auto duration =
+                chrono::duration_cast<chrono::microseconds>(end - start);
+            timesForPow.push_back(duration.count());
+            readsForPow.push_back(readCounter);
+        }
+        times.push_back(timesForPow);
+        reads.push_back(readsForPow);
+    }
+
+    // Write results to file
+    ofstream timesFile(timesOutputFile);
+    ofstream readsFile(readsOutputFile);
+
+    for (int i = 0; i < times.size(); i++) {
+        for (int j = 0; j < times[i].size(); j++) {
+            timesFile << times[i][j] << ",";
+            readsFile << reads[i][j] << ",";
+        }
+        timesFile << endl;
+        readsFile << endl;
+    }
+
+    timesFile.close();
+    readsFile.close();
+
+    cout << "Finished " << algorithm_name << endl;
+}
+
 int main() {
     optimize();
 
@@ -89,6 +166,11 @@ int main() {
     int M = calculate_M(B, node_size, child_size);
 
     cout << "M=" << M << endl;
+
+    for (BulkLoadingAlgorithm algorithm :
+         {NearestX, HilbertCurve, SortTileRecursive}) {
+        runExperiment(algorithm, M);
+    }
 
     return 0;
 }
