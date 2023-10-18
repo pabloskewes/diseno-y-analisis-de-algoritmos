@@ -54,9 +54,10 @@ int main() {
     int B = 4096; // 4KB: block size
 
     int node_size =
-        sizeof(bool) +
-        sizeof(long long) + // 1 byte for is_leaf, 8 bytes for offses
-        sizeof(int);        // 4 bytes for num_children
+        sizeof(bool) + // 1 byte for is_leaf
+        sizeof(long long) + // 8 bytes for offset
+        sizeof(int) +        // 4 bytes for num_rectangles
+        sizeof(int);       // 4 bytes for num_children
 
     int child_size =
         sizeof(Rectangle) +

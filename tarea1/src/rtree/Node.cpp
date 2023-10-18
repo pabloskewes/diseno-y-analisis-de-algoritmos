@@ -18,7 +18,6 @@ Node::Node(vector<Node *> children, vector<Rectangle> rectangles,
     this->rectangles = rectangles;
     this->is_leaf = is_leaf;
     this->MBR = computeMBR(rectangles);
-    this->offset = offset;
 }
 
 /**
@@ -29,16 +28,28 @@ void Node::print() {
     cout << "Node(MBR=(" << this->MBR.bottom_left.x << ", "
          << this->MBR.bottom_left.y << "), (" << this->MBR.top_right.x << ", "
          << this->MBR.top_right.y << "), is_leaf=" << this->is_leaf
-         << ", num_children=" << this->children.size() << ")" << endl;
+         << ", num_children=" << this->children.size()
+         << ", disk_size=" << this->diskSize() << ")" << endl;
 }
 
 /**
  * @brief Computes the size that the node would take in the disk.
  * @return The size of the node.
+ * @details The size of the node is:
+ * 1 byte for is_leaf
+ * 8 bytes for offset
+ * 4 bytes for num_children
+ * 4 bytes for num_rectangles
+ * 32 bytes for each rectangle
+ * 8 bytes for each offset
  */
 int Node::diskSize() {
-    int metadata_size = sizeof(this->is_leaf) + sizeof(this->offset);
-    int rectangles_size = this->rectangles.size() * sizeof(Rectangle);
-    int children_size = this->children.size() * sizeof(long long);
+    int metadata_size = sizeof(this->is_leaf) + sizeof(this->offset) +
+                        sizeof(int) + // 4 bytes for num_children
+                        sizeof(int);  // 4 bytes for num_rectangles
+    int rectangles_size = this->rectangles.size() *
+                          sizeof(Rectangle); // 32 bytes for each rectangle
+    int children_size =
+        this->children.size() * sizeof(long long); // 8 bytes for each offset
     return metadata_size + rectangles_size + children_size;
 }

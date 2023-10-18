@@ -12,8 +12,6 @@ using namespace std;
  * @param MBR The Minimum Bounding Rectangle of the node.
  * @param children The children of the node.
  * @param is_leaf Whether the node is a leaf or not.
- * @param offset The corresponding offset in the file where the node is stored:
- * -1 if the node is not stored in the file.
  */
 class Node {
   public:
@@ -33,15 +31,16 @@ class Node {
  * @struct NodeData
  * @brief A struct representing the data of a node in the R-tree that is stored
  * in the file (i.e. not in memory)
- * @param offset The offset of the node in the file.
- * @param is_leaf Whether the node is a leaf or not.
- * @param num_children The number of children of the node.
- * @param rectangles The rectangles contained in the node.
- * @param children_offsets The offsets of the children of the node in the file.
+ * @param offset The offset of the node in the file. (8 bytes)
+ * @param is_leaf Whether the node is a leaf or not. (1 byte)
+ * @param rectangles The rectangles contained in the node. (32 bytes each)
+ * @param children_offsets The offsets of the children of the node in the file. (8 bytes each)
+ * @details The size of the struct is 8 + 1 + 32 * num_rectangles + 8 * num_children
  */
 struct NodeData {
     long long offset;
     bool is_leaf;
+    int num_rectangles;
     int num_children;
     vector<Rectangle> rectangles;
     vector<long long> children_offsets;
