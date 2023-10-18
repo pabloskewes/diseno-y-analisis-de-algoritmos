@@ -86,13 +86,27 @@ int main() {
 
     int power = 17;
 
-    RTree rtree = saveBtreeBin(power, NearestX, M);
-    bool success = rtree.checkNodesInMemoryEqualNodesInDisk();
+    // RTree rtree = saveBtreeBin(power, NearestX, M);
+    // bool success = rtree.checkNodesInMemoryEqualNodesInDisk();
 
-    if (success) {
-        cout << "Nodes in memory and in disk are equal" << endl;
-    } else {
-        cout << "Nodes in memory and in disk are not equal" << endl;
+    // if (success) {
+    //     cout << "Nodes in memory and in disk are equal" << endl;
+    // } else {
+    //     cout << "Nodes in memory and in disk are not equal" << endl;
+    // }
+
+    RTree rtree = RTree::loadFromDisk(M, "data/btrees/nearest_x/pow_17.bin");
+    Rectangle rectangle = {{10000, 10000}, {100000, 100000}};
+
+    cout << "Querying rectangle: " << endl;
+    print_rectangle(rectangle);
+
+    vector<Rectangle> result = rtree.query(rectangle);
+
+    cout << "Result size: " << result.size() << endl;
+    cout << "Results: " << endl;
+    for (int i = 0; i < result.size(); i++) {
+        print_rectangle(result[i]);
     }
 
     return 0;

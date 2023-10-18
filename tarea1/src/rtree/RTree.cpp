@@ -64,6 +64,18 @@ RTree RTree::bulkLoad(int M, vector<Rectangle> rectangles,
 }
 
 /**
+ * @brief Loads an RTree from the disk.
+ * @param file The file where the RTree is stored.
+ * @return The RTree loaded from the disk.
+ */
+RTree RTree::loadFromDisk(int M, string file) {
+    RTree rtree = RTree(M, NULL, false);
+    rtree.nodes_file = file;
+    rtree.nodes_in_disk = true;
+    return rtree;
+}
+
+/**
  * @brief Gets the height of the RTree.
  * @return The height of the RTree.
  */
@@ -230,5 +242,58 @@ bool _checkNodesInMemoryEqualNodesInDisk(RTree *rtree, Node *node) {
  * @return Whether the nodes in memory are equal to the nodes in the disk.
  */
 bool RTree::checkNodesInMemoryEqualNodesInDisk() {
+    if (!this->nodes_in_disk) {
+        throw "Nodes not in disk";
+    }
+    if (!this->tree_loaded) {
+        throw "Nodes not in memory";
+    }
     return _checkNodesInMemoryEqualNodesInDisk(this, this->root);
+}
+
+void _query(RTree *rtree, long long offset, Rectangle query_rect,
+            vector<Rectangle> &result, ifstream &input_file) {
+    NodeData node_data = rtree->readNodeFromDisk(offset);
+
+    if (node_data.is_leaf) {
+        for (int i = 0; i < node_data.rectangles.size(); i++) {
+            Rectangle rectangle = node_data.rectangles[i];
+            if (intersects(rectangle, query_rect)) {
+                result.push_back(rectangle);
+            }
+        }
+    } else {
+        for (int i = 0; i < node_data.rectangles.size(); i++) {
+            Rectangle rectangle = node_data.rectangles[i];
+            if (intersects(rectangle, query_rect)) {
+                _query(rtree, node_data.children_offsets[i], query_rect, result,
+                       input_file);
+            }
+        }
+    }
+}
+
+/**
+ * @brief Queries the RTree for the rectangles that intersect with the given
+ * rectangle. The query is done in disk.
+ * @param rectangle The rectangle to query.
+ * @return The rectangles that intersect with the given rectangle.
+ */
+vector<Rectangle> RTree::query(Rectangle rectangle) {
+    if (!this->nodes_in_disk) {
+        throw "Nodes not in disk";
+    }
+
+    vector<Rectangle> result;
+
+    ifstream input_file(this->nodes_file, ios::in | ios::binary);
+    if (!input_file.is_open()) {
+        throw "Could not open file";
+    }
+
+    _query(this, 0, rectangle, result, input_file);
+
+    input_file.close();
+
+    return result;
 }

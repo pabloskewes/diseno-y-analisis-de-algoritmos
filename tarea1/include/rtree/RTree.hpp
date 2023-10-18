@@ -35,6 +35,7 @@ class RTree {
 
     static RTree bulkLoad(int M, vector<Rectangle> rectangles,
                           BulkLoadingAlgorithm algorithm);
+    static RTree loadFromDisk(int M, string file); 
 
     int getHeight();
 
@@ -43,6 +44,8 @@ class RTree {
     bool checkNodesInMemoryEqualNodesInDisk();
 
     NodeData readNodeFromDisk(long long offset);
+
+    vector<Rectangle> query(Rectangle rectangle);
 };
 
 #endif
