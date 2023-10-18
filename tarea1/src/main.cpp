@@ -66,7 +66,7 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
 
 void createAndSaveRTrees(int M) {
     int first_power = 10;
-    int last_power = 22;
+    int last_power = 25;
 
     for (int i = first_power; i <= last_power; i++) {
         for (BulkLoadingAlgorithm algorithm :
@@ -104,7 +104,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
     vector<vector<int>> reads;
 
     // For each 2^i
-    for (int i = 10; i <= 22; i++) {
+    for (int i = 10; i <= 25; i++) {
         cout << "Running for 2^" << i << endl;
         string nodesFile =
             "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
