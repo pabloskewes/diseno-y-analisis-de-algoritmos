@@ -2,8 +2,8 @@
 
 ## Integrantes
 - [Pablo Skewes](https://github.com/pabloskewes/)
-- [Tomás Alvarado]()
-- [Sebastián Brzovic]()
+- [Tomás Alvarado](https://github.com/TomasAlvarado21)
+- [Sebastián Brzovic](https://github.com/sebabrzovic)
 
 ## Instrucciones de instalación
 Para instalar las dependencias del proyecto, se debe disponer de un sistema operativo Linux y ejecutar el siguiente comando en la terminal:
