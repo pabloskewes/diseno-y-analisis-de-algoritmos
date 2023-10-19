@@ -66,7 +66,7 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
 
 void createAndSaveRTrees(int M) {
     int first_power = 10;
-    int last_power = 22;
+    int last_power = 25;
 
     for (int i = first_power; i <= last_power; i++) {
         for (BulkLoadingAlgorithm algorithm :
