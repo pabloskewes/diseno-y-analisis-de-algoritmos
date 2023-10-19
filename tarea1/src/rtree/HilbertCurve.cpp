@@ -35,13 +35,10 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
 /**
  * @brief Calculates the Hilbert value of a point.
  * @param point The point to calculate the Hilbert value of.
- * @param n The number of points in the space.
- * @param minPoint The minimum point of the space.
- * @param maxPoint The maximum point of the space.
  * @return The Hilbert value of the point.
  */
 
-int hilbertValue(Point point, int n, Point minPoint, Point maxPoint) {
+int hilbertValue(Point point, int n) {
 
     long long hilbertVal = 0;
     int x = point.x;
@@ -110,20 +107,35 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     // Calculate order of Hilbert curve
-    int n = rectangles.size();
-    Point minPoint = {0, 0};
-    Point maxPoint = {500000, 500000};
+    int n = ceil(log2(rectangles.size()));
+    int order = 1 << n;
 
     // Create tuple with center of each rectangle and their Hilbert values
     vector<tuple<Rectangle, long long>> tuples;
     for (Rectangle rect : rectangles) { // O(n)
-        Point center = middle_point(rect);
-        long long hilbertVal = hilbertValue(center, n, minPoint, maxPoint); //
+        Point realCenter = middle_point(rect);
+        Point center = {round(realCenter.x), round(realCenter.y)};
+        long long hilbertVal = hilbertValue(center, order); //
         // Adjust the order as needed tuple
-        tuple<Rectangle, int> tuple =
-            make_tuple(rect, hilbertVal);
+        tuple<Rectangle, long long> tuple = make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
     }
+
+    vector<long long> hilbertValues;
+    for (tuple<Rectangle, long long> tuple : tuples) {
+        hilbertValues.push_back(get<1>(tuple));
+    }
+
+    // stats on hilbert values: min, max, median, count
+    long long min = *min_element(hilbertValues.begin(), hilbertValues.end());
+    long long max = *max_element(hilbertValues.begin(), hilbertValues.end());
+    long long median = hilbertValues[hilbertValues.size() / 2];
+    long long count = hilbertValues.size();
+
+    cout << "min: " << min << endl;
+    cout << "max: " << max << endl;
+    cout << "median: " << median << endl;
+    cout << "count: " << count << endl;
 
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)
@@ -132,6 +144,28 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
            const tuple<Rectangle, long long> &b) {
             return get<1>(a) < get<1>(b);
         });
+
+    cout << "SORTED TUPLES" << endl;
+    // print first 10 tuples
+    cout << "First 10 tuples:" << endl;
+    for (int i = 0; i < 10; i++) {
+        tuple<Rectangle, long long> tuple = tuples[i];
+        Rectangle rect = get<0>(tuple);
+        long long hilbertVal = get<1>(tuple);
+        cout << "Rectangle: ";
+        print_rectangle(rect);
+        cout << "Hilbert value: " << hilbertVal << endl;
+    }
+
+    cout << "Last 10 tuples:" << endl;
+    for (int i = tuples.size() - 10; i < tuples.size(); i++) {
+        tuple<Rectangle, long long> tuple = tuples[i];
+        Rectangle rect = get<0>(tuple);
+        long long hilbertVal = get<1>(tuple);
+        cout << "Rectangle: ";
+        print_rectangle(rect);
+        cout << "Hilbert value: " << hilbertVal << endl;
+    }
 
     // Create nodes from sorted tuples
     vector<Node *> leafs;

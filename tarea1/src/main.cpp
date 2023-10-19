@@ -1,6 +1,7 @@
 #include "rectangle/rect_generator.hpp"
 #include "rectangle/rectangle.hpp"
 #include "rectangle/test_rectangle.hpp"
+#include "rtree/HilbertCurve.hpp"
 #include "rtree/RTree.hpp"
 
 #include <chrono>
@@ -104,7 +105,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
     vector<vector<int>> reads;
 
     // For each 2^i
-    for (int i = 10; i <= 25; i++) {
+    for (int i = 15; i <= 24; i++) {
         cout << "Running for 2^" << i << endl;
         string nodesFile =
             "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
@@ -167,14 +168,32 @@ int main() {
 
     cout << "M=" << M << endl;
 
-    for (int i = 25; i <= 25; i++) {
+    for (int i = 24; i <= 24; i++) {
         saveBtreeBin(i, HilbertCurve, M);
     }
 
-    // for (BulkLoadingAlgorithm algorithm :
-    //      {NearestX, HilbertCurve, SortTileRecursive}) {
+    // for (BulkLoadingAlgorithm algorithm : {
+    //          SortTileRecursive,
+    //          NearestX,
+    //          HilbertCurve,
+    //      }) {
+    //     auto start = chrono::high_resolution_clock::now();
     //     runExperiment(algorithm, M);
+    //     auto end = chrono::high_resolution_clock::now();
+    //     auto duration =
+    //         chrono::duration_cast<chrono::microseconds>(end - start);
+    //     int milliseconds = duration.count() / 1000;
+    //     cout << "Experiment for " << algorithm << " took " << milliseconds
+    //          << "ms" << endl;
     // }
+
+    // int order = 1 << 20;
+    // Point p1 = {0, 500000};
+
+    // cout << "Order: " << order << endl;
+    // long long curvePos = hilbertValue(p1, order);
+    // cout << "curvePos: " << curvePos << endl;
+    // cout << "log2(curvePos): " << log2(curvePos) << endl;
 
     return 0;
 }

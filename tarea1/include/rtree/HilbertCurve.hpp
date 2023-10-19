@@ -7,6 +7,7 @@
 
 using namespace std;
 
+int hilbertValue(Point point, int n);
 Node* hilbertCurve(int M, vector<Rectangle> rectangles);
 
 #endif // NEAREST_X_HPP
