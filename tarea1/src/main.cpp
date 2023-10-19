@@ -167,10 +167,14 @@ int main() {
 
     cout << "M=" << M << endl;
 
-    for (BulkLoadingAlgorithm algorithm :
-         {NearestX, HilbertCurve, SortTileRecursive}) {
-        runExperiment(algorithm, M);
+    for (int i = 25; i <= 25; i++) {
+        saveBtreeBin(i, HilbertCurve, M);
     }
+
+    // for (BulkLoadingAlgorithm algorithm :
+    //      {NearestX, HilbertCurve, SortTileRecursive}) {
+    //     runExperiment(algorithm, M);
+    // }
 
     return 0;
 }
