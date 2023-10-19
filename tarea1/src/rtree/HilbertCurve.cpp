@@ -3,7 +3,7 @@
 #include "rtree/RTree.hpp"
 
 #include <algorithm>
-#include <cmath> // log2
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <tuple>
@@ -35,18 +35,18 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
 /**
  * @brief Calculates the Hilbert value of a point.
  * @param point The point to calculate the Hilbert value of.
- * @param order The order of the Hilbert curve.
+ * @param n The number of points in the space.
  * @param minPoint The minimum point of the space.
  * @param maxPoint The maximum point of the space.
  * @return The Hilbert value of the point.
  */
 
-int hilbertValue(Point point, int order, Point minPoint, Point maxPoint) {
+int hilbertValue(Point point, int n, Point minPoint, Point maxPoint) {
 
-    int hilbertVal = 0;
+    long long hilbertVal = 0;
     int x = point.x;
     int y = point.y;
-    int s = order / 2;
+    int s = n / 2;
 
     while (s > 0) {
         int rx = (x & s) > 0;
@@ -110,27 +110,27 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     // Calculate order of Hilbert curve
-    int order = ceil(log2(rectangles.size()));
+    int n = rectangles.size();
     Point minPoint = {0, 0};
     Point maxPoint = {500000, 500000};
 
     // Create tuple with center of each rectangle and their Hilbert values
-    vector<tuple<Rectangle, Point, int>> tuples;
+    vector<tuple<Rectangle, long long>> tuples;
     for (Rectangle rect : rectangles) { // O(n)
         Point center = middle_point(rect);
-        int hilbertVal = hilbertValue(center, order, minPoint, maxPoint); //
+        long long hilbertVal = hilbertValue(center, n, minPoint, maxPoint); //
         // Adjust the order as needed tuple
-        tuple<Rectangle, Point, int> tuple =
-            make_tuple(rect, center, hilbertVal);
+        tuple<Rectangle, int> tuple =
+            make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
     }
 
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)
         tuples.begin(), tuples.end(),
-        [](const tuple<Rectangle, Point, int> &a,
-           const tuple<Rectangle, Point, int> &b) {
-            return get<2>(a) < get<2>(b);
+        [](const tuple<Rectangle, long long> &a,
+           const tuple<Rectangle, long long> &b) {
+            return get<1>(a) < get<1>(b);
         });
 
     // Create nodes from sorted tuples
@@ -138,7 +138,7 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     for (int i = 0; i < tuples.size(); i += M) { // O(n)
         vector<Rectangle> rectangles;
         for (int j = i; j < i + M && j < tuples.size(); j++) {
-            tuple<Rectangle, Point, int> tuple = tuples[j];
+            tuple<Rectangle, long long> tuple = tuples[j];
             Rectangle rect = get<0>(tuple);
             rectangles.push_back(rect);
         }
