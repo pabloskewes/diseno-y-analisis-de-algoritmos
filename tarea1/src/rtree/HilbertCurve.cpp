@@ -106,14 +106,8 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  * iteration can be grouped into a single root node.
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
-    // Calculate order of Hilbert curve
-    // int n = ceil(log2(rectangles.size()));
+
     long long n = 500000;
-
-    // int order = 1 << n;
-
-    cout << "n: " << n << endl;
-    // cout << "order: " << order << endl;
 
     // Create tuple with center of each rectangle and their Hilbert values
     long long i = 0;
@@ -127,22 +121,6 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
         tuple<Rectangle, long long> tuple = make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
     }
-
-    vector<long long> hilbertValues;
-    for (tuple<Rectangle, long long> tuple : tuples) {
-        hilbertValues.push_back(get<1>(tuple));
-    }
-
-    // stats on hilbert values: min, max, median, count
-    long long min = *min_element(hilbertValues.begin(), hilbertValues.end());
-    long long max = *max_element(hilbertValues.begin(), hilbertValues.end());
-    long long median = hilbertValues[hilbertValues.size() / 2];
-    long long count = hilbertValues.size();
-
-    cout << "min: " << min << endl;
-    cout << "max: " << max << endl;
-    cout << "median: " << median << endl;
-    cout << "count: " << count << endl;
 
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)

@@ -168,7 +168,7 @@ int main() {
 
     cout << "M=" << M << endl;
 
-    for (int i = 20; i <= 20; i++) {
+    for (int i = 10; i <= 24; i++) {
         saveBtreeBin(i, HilbertCurve, M);
     }
 
