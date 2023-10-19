@@ -169,24 +169,23 @@ int main() {
 
     cout << "M=" << M << endl;
 
-    for (int i = 10; i <= 25; i++) {
-        saveBtreeBin(i, HilbertCurve, M);
-    }
-
-    // for (BulkLoadingAlgorithm algorithm : {
-    //          SortTileRecursive,
-    //          NearestX,
-    //          HilbertCurve,
-    //      }) {
-    //     auto start = chrono::high_resolution_clock::now();
-    //     runExperiment(algorithm, M);
-    //     auto end = chrono::high_resolution_clock::now();
-    //     auto duration =
-    //         chrono::duration_cast<chrono::microseconds>(end - start);
-    //     int milliseconds = duration.count() / 1000;
-    //     cout << "Experiment for " << algorithm << " took " << milliseconds
-    //          << "ms" << endl;
+    // for (int i = 10; i <= 25; i++) {
+    //     saveBtreeBin(i, HilbertCurve, M);
     // }
+
+    for (BulkLoadingAlgorithm algorithm :
+         {NearestX, HilbertCurve, SortTileRecursive}) {
+        auto start = chrono::high_resolution_clock::now();
+
+        runExperiment(algorithm, M);
+        
+        auto end = chrono::high_resolution_clock::now();
+        auto duration =
+            chrono::duration_cast<chrono::microseconds>(end - start);
+        int milliseconds = duration.count() / 1000;
+        cout << "Experiment for " << algorithm << " took " << milliseconds
+             << "ms" << endl;
+    }
 
     return 0;
 }
