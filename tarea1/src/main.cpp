@@ -1,6 +1,7 @@
 #include "rectangle/rect_generator.hpp"
 #include "rectangle/rectangle.hpp"
 #include "rectangle/test_rectangle.hpp"
+#include "rtree/HilbertCurve.hpp"
 #include "rtree/RTree.hpp"
 
 #include <chrono>
@@ -100,7 +101,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
     string timesOutputFile = "data/results/times_" + algorithm_name + ".csv";
     string readsOutputFile = "data/results/reads_" + algorithm_name + ".csv";
 
-    vector<vector<long long>> times;
+    vector<vector<unsigned long long>> times;
     vector<vector<int>> reads;
 
     // For each 2^i
@@ -110,7 +111,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
             "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
         RTree rtree = RTree::loadFromDisk(M, nodesFile);
 
-        vector<long long> timesForPow;
+        vector<unsigned long long> timesForPow;
         vector<int> readsForPow;
         // For each q in Q
         for (int j = 0; j < Q.size(); j++) {
@@ -154,26 +155,37 @@ int main() {
     // Computing right size for M
     int B = 4096; // 4KB: block size
 
-    int node_size = sizeof(bool) +      // 1 byte for is_leaf
-                    sizeof(long long) + // 8 bytes for offset
-                    sizeof(int) +       // 4 bytes for num_rectangles
-                    sizeof(int);        // 4 bytes for num_children
+    int node_size = sizeof(bool) +               // 1 byte for is_leaf
+                    sizeof(unsigned long long) + // 8 bytes for offset
+                    sizeof(int) +                // 4 bytes for num_rectangles
+                    sizeof(int);                 // 4 bytes for num_children
 
     int child_size =
         sizeof(Rectangle) +
-        sizeof(long long); // 32 bytes for rectangle, 8 bytes for offset
+        sizeof(
+            unsigned long long); // 32 bytes for rectangle, 8 bytes for offset
 
     int M = calculate_M(B, node_size, child_size);
 
     cout << "M=" << M << endl;
 
-    for (int i = 25; i <= 25; i++) {
+    for (int i = 10; i <= 25; i++) {
         saveBtreeBin(i, HilbertCurve, M);
     }
 
-    // for (BulkLoadingAlgorithm algorithm :
-    //      {NearestX, HilbertCurve, SortTileRecursive}) {
+    // for (BulkLoadingAlgorithm algorithm : {
+    //          SortTileRecursive,
+    //          NearestX,
+    //          HilbertCurve,
+    //      }) {
+    //     auto start = chrono::high_resolution_clock::now();
     //     runExperiment(algorithm, M);
+    //     auto end = chrono::high_resolution_clock::now();
+    //     auto duration =
+    //         chrono::duration_cast<chrono::microseconds>(end - start);
+    //     int milliseconds = duration.count() / 1000;
+    //     cout << "Experiment for " << algorithm << " took " << milliseconds
+    //          << "ms" << endl;
     // }
 
     return 0;

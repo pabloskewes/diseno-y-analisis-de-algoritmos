@@ -35,18 +35,15 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
 /**
  * @brief Calculates the Hilbert value of a point.
  * @param point The point to calculate the Hilbert value of.
- * @param n The number of points in the space.
- * @param minPoint The minimum point of the space.
- * @param maxPoint The maximum point of the space.
  * @return The Hilbert value of the point.
  */
 
-int hilbertValue(Point point, int n, Point minPoint, Point maxPoint) {
+unsigned long long hilbertValue(Point point, unsigned long long n) {
 
-    long long hilbertVal = 0;
+    unsigned long long hilbertVal = 0;
     int x = point.x;
     int y = point.y;
-    int s = n / 2;
+    unsigned long long s = n / 2;
 
     while (s > 0) {
         int rx = (x & s) > 0;
@@ -109,18 +106,19 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  * iteration can be grouped into a single root node.
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
-    // Calculate order of Hilbert curve
-    int n = rectangles.size();
-    Point minPoint = {0, 0};
-    Point maxPoint = {500000, 500000};
+
+    unsigned long long n = pow(2, 19);
 
     // Create tuple with center of each rectangle and their Hilbert values
-    vector<tuple<Rectangle, long long>> tuples;
+    unsigned long long i = 0;
+    vector<tuple<Rectangle, unsigned long long>> tuples;
     for (Rectangle rect : rectangles) { // O(n)
-        Point center = middle_point(rect);
-        long long hilbertVal = hilbertValue(center, n, minPoint, maxPoint); //
+        Point realCenter = middle_point(rect);
+        Point center = {round(realCenter.x), round(realCenter.y)};
+        unsigned long long hilbertVal = hilbertValue(center, n); //
+
         // Adjust the order as needed tuple
-        tuple<Rectangle, int> tuple =
+        tuple<Rectangle, unsigned long long> tuple =
             make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
     }
@@ -128,8 +126,8 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)
         tuples.begin(), tuples.end(),
-        [](const tuple<Rectangle, long long> &a,
-           const tuple<Rectangle, long long> &b) {
+        [](const tuple<Rectangle, unsigned long long> &a,
+           const tuple<Rectangle, unsigned long long> &b) {
             return get<1>(a) < get<1>(b);
         });
 
@@ -138,7 +136,7 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     for (int i = 0; i < tuples.size(); i += M) { // O(n)
         vector<Rectangle> rectangles;
         for (int j = i; j < i + M && j < tuples.size(); j++) {
-            tuple<Rectangle, long long> tuple = tuples[j];
+            tuple<Rectangle, unsigned long long> tuple = tuples[j];
             Rectangle rect = get<0>(tuple);
             rectangles.push_back(rect);
         }
