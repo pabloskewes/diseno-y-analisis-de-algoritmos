@@ -38,12 +38,12 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
  * @return The Hilbert value of the point.
  */
 
-long long hilbertValue(Point point, long long n) {
+unsigned long long hilbertValue(Point point, unsigned long long n) {
 
-    long long hilbertVal = 0;
+    unsigned long long hilbertVal = 0;
     int x = point.x;
     int y = point.y;
-    long long s = n / 2;
+    unsigned long long s = n / 2;
 
     while (s > 0) {
         int rx = (x & s) > 0;
@@ -107,35 +107,54 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
 
-    long long n = 500000;
+    unsigned long long n = pow(2, 19);
 
     // Create tuple with center of each rectangle and their Hilbert values
-    long long i = 0;
-    vector<tuple<Rectangle, long long>> tuples;
+    unsigned long long i = 0;
+    vector<tuple<Rectangle, unsigned long long>> tuples;
     for (Rectangle rect : rectangles) { // O(n)
         Point realCenter = middle_point(rect);
         Point center = {round(realCenter.x), round(realCenter.y)};
-        long long hilbertVal = hilbertValue(center, n); //
+        unsigned long long hilbertVal = hilbertValue(center, n); //
 
         // Adjust the order as needed tuple
-        tuple<Rectangle, long long> tuple = make_tuple(rect, hilbertVal);
+        tuple<Rectangle, unsigned long long> tuple =
+            make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
     }
 
     // Sort tuples by Hilbert values
     std::sort( // O(n log n)
         tuples.begin(), tuples.end(),
-        [](const tuple<Rectangle, long long> &a,
-           const tuple<Rectangle, long long> &b) {
+        [](const tuple<Rectangle, unsigned long long> &a,
+           const tuple<Rectangle, unsigned long long> &b) {
             return get<1>(a) < get<1>(b);
         });
+
+    cout << "First 5 tuples:" << endl;
+    for (int i = 0; i < 5; i++) {
+        tuple<Rectangle, unsigned long long> tuple = tuples[i];
+        Rectangle rect = get<0>(tuple);
+        unsigned long long hilbertVal = get<1>(tuple);
+        print_rectangle(rect);
+        cout << "Hilbert value: " << hilbertVal << endl;
+    }
+
+    cout << "Last 5 tuples:" << endl;
+    for (int i = tuples.size() - 5; i < tuples.size(); i++) {
+        tuple<Rectangle, unsigned long long> tuple = tuples[i];
+        Rectangle rect = get<0>(tuple);
+        unsigned long long hilbertVal = get<1>(tuple);
+        print_rectangle(rect);
+        cout << "Hilbert value: " << hilbertVal << endl;
+    }
 
     // Create nodes from sorted tuples
     vector<Node *> leafs;
     for (int i = 0; i < tuples.size(); i += M) { // O(n)
         vector<Rectangle> rectangles;
         for (int j = i; j < i + M && j < tuples.size(); j++) {
-            tuple<Rectangle, long long> tuple = tuples[j];
+            tuple<Rectangle, unsigned long long> tuple = tuples[j];
             Rectangle rect = get<0>(tuple);
             rectangles.push_back(rect);
         }
