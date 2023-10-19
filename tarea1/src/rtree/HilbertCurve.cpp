@@ -38,12 +38,12 @@ void rotate(int n, int *x, int *y, int rx, int ry) {
  * @return The Hilbert value of the point.
  */
 
-int hilbertValue(Point point, int n) {
+long long hilbertValue(Point point, long long n) {
 
     long long hilbertVal = 0;
     int x = point.x;
     int y = point.y;
-    int s = n / 2;
+    long long s = n / 2;
 
     while (s > 0) {
         int rx = (x & s) > 0;
@@ -107,15 +107,22 @@ Node *_hilbertCurve(int M, vector<Node *> nodes) {
  */
 Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
     // Calculate order of Hilbert curve
-    int n = ceil(log2(rectangles.size()));
-    int order = 1 << n;
+    // int n = ceil(log2(rectangles.size()));
+    long long n = 500000;
+
+    // int order = 1 << n;
+
+    cout << "n: " << n << endl;
+    // cout << "order: " << order << endl;
 
     // Create tuple with center of each rectangle and their Hilbert values
+    long long i = 0;
     vector<tuple<Rectangle, long long>> tuples;
     for (Rectangle rect : rectangles) { // O(n)
         Point realCenter = middle_point(rect);
         Point center = {round(realCenter.x), round(realCenter.y)};
-        long long hilbertVal = hilbertValue(center, order); //
+        long long hilbertVal = hilbertValue(center, n); //
+
         // Adjust the order as needed tuple
         tuple<Rectangle, long long> tuple = make_tuple(rect, hilbertVal);
         tuples.push_back(tuple);
@@ -144,28 +151,6 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
            const tuple<Rectangle, long long> &b) {
             return get<1>(a) < get<1>(b);
         });
-
-    cout << "SORTED TUPLES" << endl;
-    // print first 10 tuples
-    cout << "First 10 tuples:" << endl;
-    for (int i = 0; i < 10; i++) {
-        tuple<Rectangle, long long> tuple = tuples[i];
-        Rectangle rect = get<0>(tuple);
-        long long hilbertVal = get<1>(tuple);
-        cout << "Rectangle: ";
-        print_rectangle(rect);
-        cout << "Hilbert value: " << hilbertVal << endl;
-    }
-
-    cout << "Last 10 tuples:" << endl;
-    for (int i = tuples.size() - 10; i < tuples.size(); i++) {
-        tuple<Rectangle, long long> tuple = tuples[i];
-        Rectangle rect = get<0>(tuple);
-        long long hilbertVal = get<1>(tuple);
-        cout << "Rectangle: ";
-        print_rectangle(rect);
-        cout << "Hilbert value: " << hilbertVal << endl;
-    }
 
     // Create nodes from sorted tuples
     vector<Node *> leafs;
