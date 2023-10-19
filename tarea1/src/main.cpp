@@ -67,7 +67,7 @@ RTree saveBtreeBin(int power, BulkLoadingAlgorithm algorithm, int M) {
 
 void createAndSaveRTrees(int M) {
     int first_power = 10;
-    int last_power = 22;
+    int last_power = 25;
 
     for (int i = first_power; i <= last_power; i++) {
         for (BulkLoadingAlgorithm algorithm :
@@ -105,7 +105,7 @@ void runExperiment(BulkLoadingAlgorithm algorithm, int M) {
     vector<vector<int>> reads;
 
     // For each 2^i
-    for (int i = 15; i <= 23; i++) {
+    for (int i = 10; i <= 25; i++) {
         cout << "Running for 2^" << i << endl;
         string nodesFile =
             "data/btrees/" + algorithm_name + "/pow_" + to_string(i) + ".bin";
@@ -155,45 +155,38 @@ int main() {
     // Computing right size for M
     int B = 4096; // 4KB: block size
 
-    int node_size = sizeof(bool) +      // 1 byte for is_leaf
+    int node_size = sizeof(bool) +               // 1 byte for is_leaf
                     sizeof(unsigned long long) + // 8 bytes for offset
-                    sizeof(int) +       // 4 bytes for num_rectangles
-                    sizeof(int);        // 4 bytes for num_children
+                    sizeof(int) +                // 4 bytes for num_rectangles
+                    sizeof(int);                 // 4 bytes for num_children
 
     int child_size =
         sizeof(Rectangle) +
-        sizeof(unsigned long long); // 32 bytes for rectangle, 8 bytes for offset
+        sizeof(
+            unsigned long long); // 32 bytes for rectangle, 8 bytes for offset
 
     int M = calculate_M(B, node_size, child_size);
 
     cout << "M=" << M << endl;
 
-    // for (int i = 15; i <= 23; i++) {
-    //     saveBtreeBin(i, HilbertCurve, M);
-    // }
-
-    for (BulkLoadingAlgorithm algorithm : {
-             SortTileRecursive,
-             NearestX,
-             HilbertCurve,
-         }) {
-        auto start = chrono::high_resolution_clock::now();
-        runExperiment(algorithm, M);
-        auto end = chrono::high_resolution_clock::now();
-        auto duration =
-            chrono::duration_cast<chrono::microseconds>(end - start);
-        int milliseconds = duration.count() / 1000;
-        cout << "Experiment for " << algorithm << " took " << milliseconds
-             << "ms" << endl;
+    for (int i = 10; i <= 25; i++) {
+        saveBtreeBin(i, HilbertCurve, M);
     }
 
-    // int order = 1 << 20;
-    // Point p1 = {0, 500000};
-
-    // cout << "Order: " << order << endl;
-    // unsigned long long curvePos = hilbertValue(p1, order);
-    // cout << "curvePos: " << curvePos << endl;
-    // cout << "log2(curvePos): " << log2(curvePos) << endl;
+    // for (BulkLoadingAlgorithm algorithm : {
+    //          SortTileRecursive,
+    //          NearestX,
+    //          HilbertCurve,
+    //      }) {
+    //     auto start = chrono::high_resolution_clock::now();
+    //     runExperiment(algorithm, M);
+    //     auto end = chrono::high_resolution_clock::now();
+    //     auto duration =
+    //         chrono::duration_cast<chrono::microseconds>(end - start);
+    //     int milliseconds = duration.count() / 1000;
+    //     cout << "Experiment for " << algorithm << " took " << milliseconds
+    //          << "ms" << endl;
+    // }
 
     return 0;
 }

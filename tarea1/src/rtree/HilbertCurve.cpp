@@ -131,24 +131,6 @@ Node *hilbertCurve(int M, vector<Rectangle> rectangles) {
             return get<1>(a) < get<1>(b);
         });
 
-    cout << "First 5 tuples:" << endl;
-    for (int i = 0; i < 5; i++) {
-        tuple<Rectangle, unsigned long long> tuple = tuples[i];
-        Rectangle rect = get<0>(tuple);
-        unsigned long long hilbertVal = get<1>(tuple);
-        print_rectangle(rect);
-        cout << "Hilbert value: " << hilbertVal << endl;
-    }
-
-    cout << "Last 5 tuples:" << endl;
-    for (int i = tuples.size() - 5; i < tuples.size(); i++) {
-        tuple<Rectangle, unsigned long long> tuple = tuples[i];
-        Rectangle rect = get<0>(tuple);
-        unsigned long long hilbertVal = get<1>(tuple);
-        print_rectangle(rect);
-        cout << "Hilbert value: " << hilbertVal << endl;
-    }
-
     // Create nodes from sorted tuples
     vector<Node *> leafs;
     for (int i = 0; i < tuples.size(); i += M) { // O(n)
