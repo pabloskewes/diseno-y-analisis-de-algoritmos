@@ -1,0 +1,21 @@
+# Compiled object files
+*.o
+*.obj
+
+# Compiled executables
+*.exe
+*.out
+
+# Build directories
+build/
+bin/
+
+# Data
+data/rectangles/*.txt
+data/btrees/nearest_x/*.bin
+data/btrees/hilbert_curve/*.bin
+data/btrees/sort_tile_recursive/*.bin
+data/results/*.csv
+
+# python venv
+report/venv/
