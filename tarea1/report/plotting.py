@@ -72,7 +72,7 @@ def build_comparison_boxplot(
             boxmean=True,
             marker_color="darkorange",
             boxpoints="all",
-            jitter=0.3,
+            jitter=0.2,
             pointpos=-1.8,
         )
     )
@@ -84,7 +84,7 @@ def build_comparison_boxplot(
             boxmean=True,
             marker_color="darkblue",
             boxpoints="all",
-            jitter=0.3,
+            jitter=0.2,
             pointpos=-1.8,
         )
     )
@@ -96,14 +96,14 @@ def build_comparison_boxplot(
             boxmean=True,
             marker_color="darkgreen",
             boxpoints="all",
-            jitter=0.3,
+            jitter=0.2,
             pointpos=-1.8,
         )
     )
 
     fig.update_layout(
         title=title,
-        xaxis_title="Number of points",
+        xaxis_title="Bulk Load Algorithm",
         yaxis_title=yaxis_title,
         yaxis_type=scale,
     )

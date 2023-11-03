@@ -58,4 +58,4 @@ def load_data(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path, usecols=range(100), header=None)
     df = inject_header(df)
     df = inject_n_index(df)
-    return df
+    return df.T
