@@ -1,10 +1,12 @@
 #include <iostream>
-#include <Array/array_generator.hpp>
+#include <ArrayGenerator/ArrayGenerator.hpp>
 
 using namespace std;
 
 int main() {
-
     cout << "Hello world!" << endl;
+
+    generateArrays();
+    
     return 0;
 }
