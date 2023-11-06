@@ -7,7 +7,11 @@ include_directories(include)
 add_executable(
     Sorting 
     src/main.cpp
-    src/ArrayGenerator/ArrayGenerator.cpp
+
+    src/Array/ArrayGenerator.cpp
+    src/Array/isSorted.cpp
+
+    src/SortAlgorithm/quickSort.cpp
 )
 
 target_link_libraries(Sorting)

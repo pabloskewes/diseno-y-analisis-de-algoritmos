@@ -33,6 +33,12 @@ vector<unsigned long long> generateRandomArray(int arraySize,
     return numbers;
 }
 
+/**
+ * Generates a random array of numbers and saves it to a file.
+ * @param arraySize The size of the array.
+ * @param universePower The power of the universe.
+ * @return The generated array.
+ */
 vector<unsigned long long>
 generateRandomArray(int arraySize, unsigned long long universePower) {
     if (universePower > 64) {
