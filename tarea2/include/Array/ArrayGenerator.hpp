@@ -7,6 +7,6 @@
 using namespace std;
 
 vector<unsigned long long>
-generateRandomArray(int arraySize, unsigned long long universePower);
+generateRandomArray(int arraySize, int universePower);
 
 #endif // ARRAY_GENERATOR_HPP

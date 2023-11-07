@@ -40,7 +40,7 @@ vector<unsigned long long> generateRandomArray(int arraySize,
  * @return The generated array.
  */
 vector<unsigned long long>
-generateRandomArray(int arraySize, unsigned long long universePower) {
+generateRandomArray(int arraySize, int universePower) {
     if (universePower > 64) {
         throw "Universe power must be less than 64";
     }

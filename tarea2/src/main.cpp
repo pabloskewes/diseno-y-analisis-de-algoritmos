@@ -1,6 +1,7 @@
 #include <Array/ArrayGenerator.hpp>
-#include <Array/isSorted.hpp>
-#include <SortAlgorithm/quickSort.hpp>
+#include <Array/ArrayChecker.hpp>
+#include <SortAlgorithm/QuickSort.hpp>
+#include <SortAlgorithm/RadixSort.hpp>
 #include <iostream>
 #include <cmath>
 
@@ -17,9 +18,13 @@ int main() {
     cout << "Array size: " << numbers.size() << endl;
     cout << "Universe power: " << universePower << endl;
 
-    quickSort(numbers);
+    vector<unsigned long long> numbersCopy = numbers;
 
-    cout << "Is sorted: " << isSorted(numbers) << endl;
+    quickSort(numbers);
+    // radixsort(numbers, 8);
+
+    // cout << "Is sorted: " << isSorted(numbers) << endl;
+    // cout << "Has same elements: " << hasSameElements(numbers, numbersCopy) << endl;
 
     return 0;
 }

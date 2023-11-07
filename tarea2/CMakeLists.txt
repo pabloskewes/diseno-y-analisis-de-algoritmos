@@ -9,9 +9,10 @@ add_executable(
     src/main.cpp
 
     src/Array/ArrayGenerator.cpp
-    src/Array/isSorted.cpp
+    src/Array/ArrayChecker.cpp
 
-    src/SortAlgorithm/quickSort.cpp
+    src/SortAlgorithm/QuickSort.cpp
+    src/SortAlgorithm/RadixSort.cpp
 )
 
 target_link_libraries(Sorting)
