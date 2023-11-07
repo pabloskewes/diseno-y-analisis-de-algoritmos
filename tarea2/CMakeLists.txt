@@ -8,6 +8,11 @@ add_executable(
     Sorting 
     src/main.cpp
 
+    src/Array/ArrayGenerator.cpp
+    src/Array/ArrayChecker.cpp
+
+    src/SortAlgorithm/QuickSort.cpp
+    src/SortAlgorithm/RadixSort.cpp
 )
 
 target_link_libraries(Sorting)
