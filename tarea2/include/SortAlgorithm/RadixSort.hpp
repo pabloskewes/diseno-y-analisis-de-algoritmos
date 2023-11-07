@@ -3,6 +3,6 @@
 
 #include <vector>
 
-void radixsort(std::vector<unsigned long long> &arr, unsigned long long k);
+void radixSort(vector<unsigned long long> &arr, int k);
 
 #endif // RADIXSORT_HPP

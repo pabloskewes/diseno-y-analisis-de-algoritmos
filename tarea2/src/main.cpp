@@ -20,11 +20,11 @@ int main() {
 
     vector<unsigned long long> numbersCopy = numbers;
 
-    quickSort(numbers);
-    // radixsort(numbers, 8);
+    // quickSort(numbers);
+    radixSort(numbers, 8);
 
-    // cout << "Is sorted: " << isSorted(numbers) << endl;
-    // cout << "Has same elements: " << hasSameElements(numbers, numbersCopy) << endl;
+    cout << "Is sorted: " << isSorted(numbers) << endl;
+    cout << "Has same elements: " << hasSameElements(numbers, numbersCopy) << endl;
 
     return 0;
 }
