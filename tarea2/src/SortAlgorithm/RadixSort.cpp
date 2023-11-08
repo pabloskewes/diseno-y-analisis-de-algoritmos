@@ -78,6 +78,5 @@ void radixSort(vector<unsigned long long> &arr, int k, int maxBits) {
 void radixSort(vector<unsigned long long> &arr, int k) {
     unsigned long long maxValue = *max_element(arr.begin(), arr.end());
     int bits = numBits(maxValue);
-    cout << "Number of bits: " << bits << endl;
     radixSort(arr, k, bits);
 }
