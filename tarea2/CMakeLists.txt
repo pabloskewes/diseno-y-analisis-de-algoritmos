@@ -12,6 +12,7 @@ add_executable(
     src/Array/ArrayChecker.cpp
 
     src/SortAlgorithm/QuickSort.cpp
+    src/SortAlgorithm/MergeSort.cpp
     src/SortAlgorithm/RadixSort.cpp
 )
 
