@@ -12,6 +12,8 @@ bin/
 
 # Data
 data/arrays/*
+data/mergeSortResults/*.csv
+data/radixSortResults/*.csv
 
 # python venv
 report/venv/
