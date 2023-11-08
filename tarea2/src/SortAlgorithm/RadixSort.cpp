@@ -65,12 +65,6 @@ void bucketSort(vector<unsigned long long> &arr, int k, int iteration) {
  */
 void radixSort(vector<unsigned long long> &arr, int k, int maxBits) {
     for (int i = 0; i < (maxBits / k); i++) {
-        // cout << "Iteration: " << i << endl;
-        // cout << "From: " << i * k << " to: " << (i + 1) * k << endl;
-        // cout << "arr before: ";
-        // for (unsigned long long num : arr) {
-        //     cout << num << " ";
-        // }
         bucketSort(arr, k, i);
     }
 }
