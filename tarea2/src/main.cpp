@@ -110,24 +110,24 @@ int main() {
     cout << "Starting experiments" << endl;
 
     int arraySize = pow(10, 7);
-    int maxK = 35;
+    int maxK = 34;
     string mergeSortOutputPath = "data/mergeSortResults/";
     string radixSortOutputPath = "data/radixSortResults/";
 
-    for (int universePower = 1; universePower <= 64; universePower++) {
-        cout << "Universe power: " << universePower << endl;
-        for (int numExperiment = 1; numExperiment <= 100; numExperiment++) {
-            cout << "Experiment number: " << numExperiment << endl;
+    for (int numExperiment = 1; numExperiment <= 100; numExperiment++) {
+        // cout << "Experiment number: " << numExperiment << endl;
+        for (int universePower = 7; universePower <= 64; universePower++) {
+            // cout << "Universe power: " << universePower << endl;
             vector<unsigned long long> numbers =
                 generateRandomArray(arraySize, universePower);
 
-            cout << "Running merge sort" << endl;
+            // cout << "Running merge sort" << endl;
             runMergeSortExperiment(mergeSortOutputPath, numbers, universePower,
                                    numExperiment);
 
-            cout << "Running radix sort" << endl;
+            // cout << "Running radix sort" << endl;
             for (int k = 1; k <= min(maxK, universePower); k++) {
-                cout << "k: " << k << endl;
+                // cout << "k: " << k << endl;
                 runRadixSortExperiment(radixSortOutputPath, numbers,
                                        universePower, k, numExperiment);
             }
@@ -135,6 +135,9 @@ int main() {
             numbers.clear();
         }
     }
+
+    // vector<unsigned long long> numbers = generateRandomArray(arraySize, 64);
+    // runRadixSortExperiment(radixSortOutputPath, numbers, 64, 35, 1);
 
     return 0;
 }
