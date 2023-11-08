@@ -11,7 +11,7 @@ int main() {
     cout << "Hello world!" << endl;
 
     // int arraySize = 100;
-    int arraySize = pow(10, 8);
+    int arraySize = pow(10, 7);
     int universePower = 64;
     vector<unsigned long long> numbers = generateRandomArray(arraySize, universePower); 
 
@@ -21,7 +21,8 @@ int main() {
     vector<unsigned long long> numbersCopy = numbers;
 
     // quickSort(numbers);
-    radixSort(numbers, 8);
+    int k = 15;
+    radixSort(numbers, k);
 
     cout << "Is sorted: " << isSorted(numbers) << endl;
     cout << "Has same elements: " << hasSameElements(numbers, numbersCopy) << endl;
