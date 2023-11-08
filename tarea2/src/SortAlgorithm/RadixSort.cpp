@@ -15,42 +15,43 @@ int numBits(unsigned long long num) {
 }
 
 /**
- * @brief Extracts the bits from a number
+ * @brief Extracts the bits from a number given positions from
+ *       the right to the left
  * @param num The number to extract the bits from
- * @param k The number of bits to extract
- * @param mask The mask to apply to the number
- * @param iteration The iteration of the radix sort
+ * @param first_pos The first position to extract the bits (from the right)
+ * @param last_pos The last position to extract the bits (from the right)
  * @return The extracted bits
  */
-unsigned long long extractBits(unsigned long long num, int k,
-                               unsigned long long mask, int iteration) {
-
-    unsigned long long indexMask = num & mask;
-    unsigned long long bucketIndex = indexMask >> (iteration * k);
-
-    return bucketIndex;
+unsigned long long extractBits(unsigned long long num, int first_pos,
+                               int last_pos) {
+    unsigned long long mask;
+    if (last_pos == 64) {
+        mask = ~0; // 2^64 - 1 (all 1s)
+    } else {
+        mask = (1ULL << last_pos) - 1;
+    }
+    return (num & mask) >> first_pos;
 }
 
 /**
  * @brief Sorts an array using the bucket sort algorithm
  * @param arr The array to sort
- * @param k The number of bits to sort at a time
- * @param iteration The iteration of the radix sort
+ * @param first_pos The first position to extract the bits (from the right)
+ * @param last_pos The last position to extract the bits (from the right)
  */
-void bucketSort(vector<unsigned long long> &arr, int k, int iteration) {
-    unsigned long long mask = (1ULL << k * (iteration + 1)) - 1;
-
-    vector<vector<unsigned long long>> buckets(1 << k);
+void bucketSort(vector<unsigned long long> &arr, int first_pos, int last_pos) {
+    int bucketSize = last_pos - first_pos;
+    vector<vector<unsigned long long>> buckets(1 << bucketSize);
 
     for (unsigned long long &num : arr) {
-        unsigned long long bucketIndex = extractBits(num, k, mask, iteration);
+        unsigned long long bucketIndex = extractBits(num, first_pos, last_pos);
 
         buckets[bucketIndex].push_back(num);
     }
 
     arr.clear();
 
-    for (int i = 0; i < (1 << k); i++) {
+    for (int i = 0; i < buckets.size(); i++) {
         for (unsigned long long num : buckets[i]) {
             arr.push_back(num);
         }
@@ -64,8 +65,8 @@ void bucketSort(vector<unsigned long long> &arr, int k, int iteration) {
  * @param maxBits The maximum number of bits of the numbers
  */
 void radixSort(vector<unsigned long long> &arr, int k, int maxBits) {
-    for (int i = 0; i < (maxBits / k); i++) {
-        bucketSort(arr, k, i);
+    for (int i = 0; i < maxBits; i += k) {
+        bucketSort(arr, i, min(i + k, maxBits));
     }
 }
 
@@ -80,28 +81,3 @@ void radixSort(vector<unsigned long long> &arr, int k) {
     cout << "Number of bits: " << bits << endl;
     radixSort(arr, k, bits);
 }
-
-// int main() {
-//     // Define the vector with your data
-//     // vector<unsigned long long> numbers = {0b1001010, 0b1101010, 0b11111010,
-//     //                                       0b1101100, 0b100100, 0b1011110,
-//     //                                       0b1000010, 0b1100101};
-//     vector<unsigned long long> numbers = {
-//         928374, 123456,    123456789,       1234567891234,   1234567,        1,
-//         2,      987654321, 987654321987654, 987654321987655, 987654331987654};
-
-//     // Set the number of bits to sort at a time
-//     int k = 16;
-//     int maxBits = 64;
-
-//     // Perform radix sort with the specified number of bits
-//     radixSort(numbers, k, maxBits);
-//     cout << "arr after: ";
-
-//     // Print the sorted vector
-//     for (unsigned long long num : numbers) {
-//         cout << num << " ";
-//     }
-
-//     return 0;
-// }

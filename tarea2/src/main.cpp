@@ -11,8 +11,8 @@ int main() {
     cout << "Hello world!" << endl;
 
     // int arraySize = 100;
-    int arraySize = pow(10, 6);
-    int universePower = 60;
+    int arraySize = pow(10, 7);
+    int universePower = 64;
     vector<unsigned long long> numbers = generateRandomArray(arraySize, universePower); 
 
     cout << "Array size: " << numbers.size() << endl;
@@ -21,7 +21,7 @@ int main() {
     vector<unsigned long long> numbersCopy = numbers;
 
     // quickSort(numbers);
-    int k = 10;
+    int k = 15;
     radixSort(numbers, k);
 
     cout << "Is sorted: " << isSorted(numbers) << endl;
