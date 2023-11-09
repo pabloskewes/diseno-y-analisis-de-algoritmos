@@ -31,7 +31,7 @@ def load_mergesort_results(path: Path):
     df["experiment"] = df["experiment"].astype(int)
     df["time"] = df["time"].astype(float)
     df.sort_values(["universe", "experiment"], inplace=True)
-    return df
+    return df.reset_index(drop=True)
 
 
 def load_radixsort_results(path: Path):
@@ -63,4 +63,4 @@ def load_radixsort_results(path: Path):
     df["experiment"] = df["experiment"].astype(int)
     df["time"] = df["time"].astype(float)
     df.sort_values(["universe", "bucket_size", "experiment"], inplace=True)
-    return df
+    return df.reset_index(drop=True)
