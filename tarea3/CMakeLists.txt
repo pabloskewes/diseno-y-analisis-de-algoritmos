@@ -6,7 +6,10 @@ include_directories(include)
 
 add_executable(
     Hashing
+
     src/main.cpp
+
+    src/Grid/Grid.cpp
 )
 
 target_link_libraries(Hashing)
