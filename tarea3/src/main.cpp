@@ -1,25 +1,21 @@
 #include "Grid/Grid.hpp"
+#include "Grid/bulkGeneration.hpp"
 #include <iostream>
 
 using namespace std;
 
-string filename = "data/grids/grid_100.bin";
+string gridsBaseDir = "data/grids/";
 
 int main() {
     cout << "Hello, World!" << endl;
 
-    Grid generatedGrid = generateGrid(10000);
-    writeGrid(generatedGrid, filename);
-    Grid loadedGrid = loadGrid(filename);
+    // Generate grids
+    // bulkGenerateGrids(gridsBaseDir);
 
-    bool equal = true;
-    for (int i = 0; i < generatedGrid.points.size(); i++) {
-        if (generatedGrid.points[i].x != loadedGrid.points[i].x ||
-            generatedGrid.points[i].y != loadedGrid.points[i].y) {
-            equal = false;
-            break;
-        }
+    // Load grid
+    for (int i = 5; i <= 50; i += 5) {
+        string filename = gridsBaseDir + to_string(i) + ".bin";
+        Grid grid = loadGrid(filename);
+        printGrid(grid);
     }
-
-    cout << "Equal: " << equal << endl;
 }

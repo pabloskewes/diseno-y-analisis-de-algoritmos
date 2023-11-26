@@ -10,6 +10,7 @@ add_executable(
     src/main.cpp
 
     src/Grid/Grid.cpp
+    src/Grid/bulkGeneration.cpp
 )
 
 target_link_libraries(Hashing)
