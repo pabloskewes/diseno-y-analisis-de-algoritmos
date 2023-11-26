@@ -22,11 +22,12 @@ int numBits(unsigned long long num) {
  * @param last_pos The last position to extract the bits (from the right)
  * @return The extracted bits
  */
+
 unsigned long long extractBits(unsigned long long num, int first_pos,
                                int last_pos) {
     unsigned long long mask;
     if (last_pos == 64) {
-        mask = ~0; // 2^64 - 1 (all 1s)
+        mask = ~0; 
     } else {
         mask = (1ULL << last_pos) - 1;
     }
@@ -42,15 +43,12 @@ unsigned long long extractBits(unsigned long long num, int first_pos,
 void bucketSort(vector<unsigned long long> &arr, int first_pos, int last_pos) {
     int bucketSize = last_pos - first_pos;
     vector<vector<unsigned long long>> buckets(1 << bucketSize);
-
     for (unsigned long long &num : arr) {
         unsigned long long bucketIndex = extractBits(num, first_pos, last_pos);
 
         buckets[bucketIndex].push_back(num);
     }
-
     arr.clear();
-
     for (int i = 0; i < buckets.size(); i++) {
         for (unsigned long long num : buckets[i]) {
             arr.push_back(num);
