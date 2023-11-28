@@ -18,4 +18,6 @@ int main() {
         Grid grid = loadGrid(filename);
         printGrid(grid);
     }
+
+
 }
