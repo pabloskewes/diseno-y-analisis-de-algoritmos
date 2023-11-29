@@ -1,59 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <climits>
 #include <bits/stdc++.h>
-#include "Grid.hpp"
+#include "../../include/Grid/Grid.hpp"
+#include "../../include/Grid/bulkGeneration.hpp"
+#include "../../src/Grid/Grid.cpp"
+
 
 
 
 using namespace std;
-// Function to calculate the square of the Euclidean distance between two points
-float distanceSquare(const Point& p1, const Point& p2) {
-    return (float)(p1.x - p2.x) * (p1.x - p2.x) + (float)(p1.y - p2.y) * (p1.y - p2.y);
+
+
+bool compareX(const Point& a, const Point& b) {
+    return a.x < b.x;
 }
 
-/*
-    * Function to find the closest pair of points in the set of points
-    * represented as a vector of points
-    * @param grid A Grid struct representing a grid with a set of points and a set of edges.
-    * @return The smallest distance between two points in the grid.
-*/
+float dist(const Point& a, const Point& b) {
+    return sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
 
-// To find the closest pair of points
-float closestPair(const Grid& grid) {
+float findClosestPoints(const Grid& grid) {
     int n = grid.points.size();
 
-    // Vector pair to store points on plane
-    vector<Point> v = grid.points;
-
-    // Sort them according to their x-coordinates
-    sort(v.begin(), v.end(), [](const Point& a, const Point& b) {
-        return a.x < b.x;
-    });
-
-    // Minimum distance b/w points seen so far
-    float d = LONG_MAX;
-
-    // Keeping the points in increasing order
-    set<Point> st;
-    st.insert({v[0].x, v[0].y});
-
-    for (int i = 1; i < n; i++) {
-        auto l = st.lower_bound({v[i].x - d, v[i].y - d});
-        auto r = st.upper_bound({v[i].x, v[i].y + d});
-        if (l == st.end())
-            continue;
-
-        for (auto p = l; p != r; p++) {
-            Point val = *p;
-            float dis = distanceSquare(v[i], val);
-
-            // Updating the minimum distance dis
-            if (d > dis)
-                d = dis;
-        }
-        st.insert({v[i].x, v[i].y});
+    if (n < 2) {
+        // No hay suficientes puntos para calcular la distancia mínima.
+        cerr << "Error: Menos de dos puntos en la cuadrícula." << endl;
+        exit(1);
     }
 
-    return d;
+    // Ordenar los puntos por su coordenada x.
+    vector<Point> sortedPoints = grid.points;
+    sort(sortedPoints.begin(), sortedPoints.end(), compareX);
+
+    float minDistance = numeric_limits<float>::max();
+    pair<Point, Point> closestPoints;
+
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            // Verificar si la distancia entre los puntos actuales es menor que la mínima conocida.
+            float currentDistance = dist(sortedPoints[i], sortedPoints[j]);
+            if (currentDistance < minDistance) {
+                minDistance = currentDistance;
+                closestPoints = make_pair(sortedPoints[i], sortedPoints[j]);
+            }
+        }
+    }
+
+    return minDistance;
 }
+
 
 /*
 * Forcated form of finding the closest pair of points in the set of points, by comparing every point distance
@@ -65,7 +63,7 @@ float closestPairForced(const Grid& grid) {
     float d = LONG_MAX;
     for (int i = 0; i < n; i++) {
         for (int j = i+1; j < n ; j++) {
-            float dis = distanceSquare(grid.points[i], grid.points[j]);
+            float dis = dist(grid.points[i], grid.points[j]);
             if (d > dis)
                 d = dis;
         }
@@ -74,16 +72,18 @@ float closestPairForced(const Grid& grid) {
 }
 
 
-// Driver code
 int main() {
+    cout << "Hello, World!" << endl;
 
-    // Points on a plane P[i] = {x, y}
-    Grid grid;
-    grid.points = {
-        {1.0, 2.0}, {2.0, 3.0}, {3.0, 4.0}, {5.0, 6.0}, {2.0, 1.0}
-    };
 
-    // Function call
-    cout << "The smallest distance is " << closestPair(grid);
-    return 0;
+    Grid grid = generateGrid(100000);
+
+    float mindistance = findClosestPoints(grid);
+    cout << "The closest pair of points in the grid is: " << mindistance << endl;
+    float mindistance2 = closestPairForced(grid);
+
+    //print each distance
+    cout << "The closest pair of points in the grid is: " << mindistance2 << endl;
+
+
 }

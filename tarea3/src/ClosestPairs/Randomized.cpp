@@ -1,6 +1,7 @@
+
 #include "ClosestPairs/Randomized.hpp"
 #include "Grid/Grid.hpp"
-#include "Hashing/Hash.hpp"
+#include "Hashing/Hashing.hpp"
 #include "ClosestPairs/SweepLine.cpp"
 #include <algorithm>
 #include <random>
