@@ -17,7 +17,7 @@ float distanceSquare(const Point& p1, const Point& p2) {
 */
 
 // To find the closest pair of points
-tuple<Point, Point, float>  closestPair(const Grid& grid) {
+float closestPair(const Grid& grid) {
     int n = grid.points.size();
 
     // Vector pair to store points on plane
@@ -52,7 +52,7 @@ tuple<Point, Point, float>  closestPair(const Grid& grid) {
         st.insert({v[i].x, v[i].y});
     }
 
-    return {Point(), Point(), d};
+    return d;
 }
 
 /*
