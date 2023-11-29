@@ -166,6 +166,7 @@ float closestPairRandomized(const Grid& grid, Hash hashFunction, int n) {
             d = minDistance2grids(ownGrid, upGrid, d);
             d = minDistance2grids(ownGrid, upRightGrid, d);
             d = minDistance2grids(ownGrid, leftGrid, d);
+            d = minDistance1grid(ownGrid, d);
         }
         else {
             // probamos con su misma grilla y con la de arriba, arriba +1, arriba -1 y la de al lado
