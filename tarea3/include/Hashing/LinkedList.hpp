@@ -10,8 +10,17 @@
 template <typename T> struct LinkedList {
     struct Node {
         T data;
+        long long id;
         Node *next;
-        Node(const T &value) : data(value), next(nullptr) {
+        Node(const T &value, long long id) {
+            this->data = value;
+            this->id = id;
+            this->next = nullptr;
+        }
+
+        void print() const {
+            std::cout << "(data: " << data << ", id: " << id << ")"
+                      << std::endl;
         }
     };
 
@@ -22,15 +31,18 @@ template <typename T> struct LinkedList {
     /**
      * @brief      Constructs the object.
      */
-    LinkedList() : head(nullptr), tail(nullptr), size(0) {
+    LinkedList() {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
     }
 
     /**
      * @brief      Pushes a back.
      * @param[in]  value  The value
      */
-    void push_back(const T &value) {
-        Node *newNode = new Node(value);
+    void push_back(const T &value, long long id) {
+        Node *newNode = new Node(value, id);
         if (head == nullptr) {
             head = newNode;
             tail = newNode;
@@ -64,12 +76,28 @@ template <typename T> struct LinkedList {
     }
 
     /**
+     * @brief      Gets a value from a given id.
+     * @param[in]  id    The identifier
+     * @return     The value.
+     */
+    T get(long long id) const {
+        Node *current = head;
+        while (current != nullptr) {
+            if (current->id == id) {
+                return current->data;
+            }
+            current = current->next;
+        }
+        return T();
+    }
+
+    /**
      * @brief      Prints the list.
      */
     void print() const {
         Node *current = head;
         while (current != nullptr) {
-            std::cout << current->data << " ";
+            current->print();
             current = current->next;
         }
         std::cout << std::endl;

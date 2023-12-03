@@ -36,7 +36,7 @@ template <typename T> struct Hashing {
      */
     Hashing() : gen(rd()) {
         size = 0;
-        m = 100000;
+        m = 10;
         p = 1000000009;
         a = uniform_int_distribution<long long>(1, p - 1)(gen);
         b = uniform_int_distribution<long long>(0, p - 1)(gen);
@@ -51,11 +51,11 @@ template <typename T> struct Hashing {
      */
     void insert(int key, const T &value) {
         long long index = hash(key);
-        buckets[index].push_back(value);
+        buckets[index].push_back(value, key);
     }
 
     /**
-     * @brief      Gets the value associated with the given key.
+     * @brief      Gets the first value associated with the given key.
      *
      * @param[in]  key   The key
      *
@@ -63,7 +63,7 @@ template <typename T> struct Hashing {
      */
     T get(int key) {
         long long index = hash(key);
-        return buckets[index].head->data;
+        return buckets[index].get(key);
     }
 
     /**
