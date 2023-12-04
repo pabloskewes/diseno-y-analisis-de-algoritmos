@@ -15,31 +15,31 @@
 using namespace std;
 
 string gridsBaseDir = "data/grids/";
-
-void runDeterministicExperiment(int from, int to, int experimentNumber) {
-    for (int i = from; i <= to; i += 5) {
-        string filename = gridsBaseDir + to_string(i) + ".bin";
-        Grid grid = loadGrid(filename);
-        cout << "Grid size: " << i << endl;
-
-        auto start = chrono::high_resolution_clock::now();
-        float d = closestPairDivideAndConquer(grid);
-        auto end = chrono::high_resolution_clock::now();
-        auto duration =
-            chrono::duration_cast<chrono::microseconds>(end - start);
-
-        cout << "Divide and conquer: " << duration.count() << " microseconds"
-             << endl;
-
-        string outputFilename = "data/results/divideAndConquer/n_" +
-                                to_string(i) + "exp_" +
-                                to_string(experimentNumber) + ".csv";
-        ofstream outputFile(outputFilename, ios::out | ios::app);
-        outputFile << i << "," << duration.count() << endl;
-        outputFile.close();
-    }
-}
-
+//
+//void runDeterministicExperiment(int from, int to, int experimentNumber) {
+//    for (int i = from; i <= to; i += 5) {
+//        string filename = gridsBaseDir + to_string(i) + ".bin";
+//        Grid grid = loadGrid(filename);
+//        cout << "Grid size: " << i << endl;
+//
+//        auto start = chrono::high_resolution_clock::now();
+//        float d = closestPairDivideAndConquer(grid);
+//        auto end = chrono::high_resolution_clock::now();
+//        auto duration =
+//            chrono::duration_cast<chrono::microseconds>(end - start);
+//
+//        cout << "Divide and conquer: " << duration.count() << " microseconds"
+//             << endl;
+//
+//        string outputFilename = "data/results/divideAndConquer/n_" +
+//                                to_string(i) + "exp_" +
+//                                to_string(experimentNumber) + ".csv";
+//        ofstream outputFile(outputFilename, ios::out | ios::app);
+//        outputFile << i << "," << duration.count() << endl;
+//        outputFile.close();
+//    }
+//}
+//
 
 
 int main() {
@@ -107,17 +107,20 @@ int main() {
     //      "
     //      << get<1>(closestPair).y << ")" << endl;
     // cout << "Distance: " << get<2>(closestPair) << endl;
-
-    // Grid grid = loadGrid(gridsBaseDir + "test.bin");
-    // float d = closestPairRandomized(grid, 50);
-    // cout << "d: " << d << endl;
+    
+    // create grid 
+    Grid grid = generateGrid(5000000);
+    float d = closestPairRandomized(grid, 10000);
+    float d2 = closestPairDivideAndConquer(grid);
+    cout << "d: " << d << endl;
+    cout << "d2: " << d2 << endl;
 
     // cout << grid << endl;
 
-    for (int i = 1; i <= 100; i++) {
-        cout << "Experiment #" << i << endl;
-        runDeterministicExperiment(5, 50, i);
-    }
+    //for (int i = 1; i <= 100; i++) {
+    //    cout << "Experiment #" << i << endl;
+    //    runDeterministicExperiment(5, 50, i);
+    //}
     
     return 0;
 }

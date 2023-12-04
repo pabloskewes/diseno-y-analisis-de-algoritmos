@@ -1,4 +1,5 @@
 #include "ClosestPairs/BruteForce.hpp"
+#include "ClosestPairs/DivideAndConquer.hpp"
 #include "Grid/Grid.hpp"
 #include "Hashing/Hashing.hpp"
 #include <algorithm>
@@ -92,7 +93,7 @@ float closestPairRandomized(const Grid &grid, int n) {
     Grid selectedGrid = selectRandomPoints(grid, n);
 
     // Calculate the potential d
-    float d = get<2>(clostestPairBruteForce(selectedGrid.points));
+    float d = closestPairDivideAndConquer(selectedGrid);
 
     cout << "d: " << d << endl;
 
@@ -100,14 +101,15 @@ float closestPairRandomized(const Grid &grid, int n) {
     int numberVerticalGrids = ceil(1 / d);
     int numberTotalGrids = pow(numberVerticalGrids, 2);
 
-    cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
-    cout << "numberTotalGrids: " << numberTotalGrids << endl;
+    //cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
+    //cout << "numberTotalGrids: " << numberTotalGrids << endl;
 
     Hashing<Grid> hash;
 
     for (int i = 0; i < numberTotalGrids; i++) {
-        hash.insert(i, Grid());
+        hash.insert(i+1, Grid());
     }
+    //hash.print();
 
     for (Point point : grid.points) {
         int gridNumber = getNumberGrid(point, d);
@@ -115,7 +117,6 @@ float closestPairRandomized(const Grid &grid, int n) {
         gridOnHash.points.push_back(point);
     }
 
-    // hash.print();
     // hash.printStats();
 
     for (int i = 1; i < numberTotalGrids; i++) {
