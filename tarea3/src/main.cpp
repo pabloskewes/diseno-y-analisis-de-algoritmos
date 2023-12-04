@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <tuple>
+#include <fstream>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ void runDeterministicExperiment(int from, int to, int experimentNumber) {
         cout << "Grid size: " << i << endl;
 
         auto start = chrono::high_resolution_clock::now();
-        float d = closestPairDivideAndConquer(grid.points);
+        float d = closestPairDivideAndConquer(grid);
         auto end = chrono::high_resolution_clock::now();
         auto duration =
             chrono::duration_cast<chrono::microseconds>(end - start);
@@ -30,7 +31,7 @@ void runDeterministicExperiment(int from, int to, int experimentNumber) {
         cout << "Divide and conquer: " << duration.count() << " microseconds"
              << endl;
 
-        string outputFilename = "data/results/divideAndConquer/" + "n_" +
+        string outputFilename = "data/results/divideAndConquer/n_" +
                                 to_string(i) + "exp_" +
                                 to_string(experimentNumber) + ".csv";
         ofstream outputFile(outputFilename, ios::out | ios::app);
@@ -38,6 +39,8 @@ void runDeterministicExperiment(int from, int to, int experimentNumber) {
         outputFile.close();
     }
 }
+
+
 
 int main() {
     cout << "Hello, World!!!" << endl;
@@ -115,6 +118,6 @@ int main() {
         cout << "Experiment #" << i << endl;
         runDeterministicExperiment(5, 50, i);
     }
-
+    
     return 0;
 }
