@@ -46,33 +46,33 @@ int main() {
     // }
 
     // load grid
-    Grid grid = loadGrid(gridsBaseDir + "test.bin");
-    Grid grid2 = copyGrid(grid);
-    Grid grid3 = copyGrid(grid);
+    // Grid grid = loadGrid(gridsBaseDir + "50.bin");
+    // Grid grid2 = copyGrid(grid);
+    // Grid grid3 = copyGrid(grid);
 
-    // Brute force
-    cout << "Brute force" << endl;
-    tuple<Point, Point, float> closestPair = clostestPairBruteForce(grid.points);
-    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
-         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
-         << get<1>(closestPair).y << ")" << endl;
-    cout << "Distance: " << get<2>(closestPair) << endl;
+    // // Brute force
+    // cout << "Brute force" << endl;
+    // tuple<Point, Point, float> closestPair = clostestPairBruteForce(grid.points);
+    // cout << "Closest pair: (" << get<0>(closestPair).x << ", "
+    //      << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
+    //      << get<1>(closestPair).y << ")" << endl;
+    // cout << "Distance: " << get<2>(closestPair) << endl;
 
-    // Divide and conquer
-    cout << "Divide and conquer" << endl;
-    closestPair = closestPairDivideAndConquer(grid2.points, 0, grid2.points.size());
-    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
-         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
-         << get<1>(closestPair).y << ")" << endl;
-    cout << "Distance: " << get<2>(closestPair) << endl;
+    // // Divide and conquer
+    // cout << "Divide and conquer" << endl;
+    // float closestPairDC = closestPairDivideAndConquer(grid2);
 
-    // Sweep line
-    cout << "Sweep line" << endl;
-    closestPair = closestPairSweepLine(grid3.points);
-    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
-         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
-         << get<1>(closestPair).y << ")" << endl;
-    cout << "Distance: " << get<2>(closestPair) << endl;
+
+    // cout << "Distance: " << closestPairDC << endl;
+
+    // // Sweep line
+    // cout << "Sweep line" << endl;
+    // closestPair = closestPairSweepLine(grid3.points);
+    // cout << "Closest pair: (" << get<0>(closestPair).x << ", "
+    //      << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
+    //      << get<1>(closestPair).y << ")" << endl;
+    // cout << "Distance: " << get<2>(closestPair) << endl;
+
 
     return 0;
 }

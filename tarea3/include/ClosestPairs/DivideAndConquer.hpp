@@ -7,22 +7,13 @@
 using namespace std;
 
 /**
- * @brief Compute the distance between two points
+ * @brief Compute the distance between two points using the Divide and Conquer algorithm
  *
- * @param p1 First point
- * @param p2 Second point
- * @return float Distance between the two points
+ * @param coordinates Vector of points
+ * @param n Number of points
+ * @return long Distance between the closest pair of points
  */
-tuple<Point, Point, float> closestPairDivideAndConquer(vector<Point> &points,
-                                                       int left, int right);
+float closestPairDivideAndConquer(Grid &grid);
 
-/**
- * @brief Find the closest pair of points in a grid using brute force
- *
- * @param points Vector of points
- * @return Tuple containing the closest pair of points and the distance between
- * them
- */
-tuple<Point, Point, float> closestPairDivideAndConquer(vector<Point> &points);
 
 #endif // DIVIDEANDCONQUER_HPP
