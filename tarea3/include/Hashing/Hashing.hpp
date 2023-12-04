@@ -36,7 +36,7 @@ template <typename T> struct Hashing {
      */
     Hashing() : gen(rd()) {
         size = 0;
-        m = 10;
+        m = 100000;
         p = 1000000009;
         a = uniform_int_distribution<long long>(1, p - 1)(gen);
         b = uniform_int_distribution<long long>(0, p - 1)(gen);
@@ -59,9 +59,9 @@ template <typename T> struct Hashing {
      *
      * @param[in]  key   The key
      *
-     * @return     The value associated with the key.
+     * @return     A reference to the value associated with the given key.
      */
-    T get(int key) {
+    T& get(int key) {
         long long index = hash(key);
         return buckets[index].get(key);
     }

@@ -18,9 +18,20 @@ template <typename T> struct LinkedList {
             this->next = nullptr;
         }
 
+        string toString() const {
+            return "Node(data=" + data.toString() +
+                   ", id=" + std::to_string(id) + ")";
+        }
+
         void print() const {
-            std::cout << "(data: " << data << ", id: " << id << ")"
-                      << std::endl;
+            // std::cout << "(data: " << data << ", id: " << id << ")"
+            //           << std::endl;
+            std::cout << toString() << std::endl;
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, const Node &node) {
+            os << node.toString();
+            return os;
         }
     };
 
@@ -80,7 +91,7 @@ template <typename T> struct LinkedList {
      * @param[in]  id    The identifier
      * @return     The value.
      */
-    T get(long long id) const {
+    T &get(long long id) const {
         Node *current = head;
         while (current != nullptr) {
             if (current->id == id) {
@@ -88,7 +99,8 @@ template <typename T> struct LinkedList {
             }
             current = current->next;
         }
-        return T();
+        throw std::out_of_range("ID " + std::to_string(id) +
+                                " not found in LinkedList");
     }
 
     /**
@@ -101,6 +113,16 @@ template <typename T> struct LinkedList {
             current = current->next;
         }
         std::cout << std::endl;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const LinkedList &linkedList) {
+        Node *current = linkedList.head;
+        while (current != nullptr) {
+            os << current->data << " ";
+            current = current->next;
+        }
+        return os;
     }
 
     /**
