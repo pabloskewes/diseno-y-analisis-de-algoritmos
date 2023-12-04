@@ -66,6 +66,7 @@ struct Grid {
 Grid loadGrid(string filename);
 void writeGrid(Grid grid, string filename);
 Grid generateGrid(int n);
+Grid mergeGrids(vector<Grid *> grids);
 void printGrid(Grid grid, int head = 5, int tail = 5);
 Grid copyGrid(Grid grid);
 

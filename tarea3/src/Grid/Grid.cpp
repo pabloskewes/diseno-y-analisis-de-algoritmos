@@ -94,6 +94,29 @@ Grid copyGrid(Grid grid) {
 }
 
 /**
+ * @brief Merges a list of grids into a single grid.
+ * @param grids The list of adrress of grids to merge.
+ * @return A grid with all the points from the grids in the list.
+ */
+Grid mergeGrids(vector<Grid *> grids) {
+    Grid grid;
+
+    size_t totalPoints = 0;
+    for (Grid *g : grids) {
+        totalPoints += g->points.size();
+    }
+
+    grid.points.reserve(totalPoints);
+
+    for (Grid *g : grids) {
+        grid.points.insert(grid.points.end(), g->points.begin(),
+                           g->points.end());
+    }
+
+    return grid;
+}
+
+/**
  * @brief Prints a grid to stdout.
  * @param grid The grid to print.
  */
@@ -110,4 +133,3 @@ void printGrid(Grid grid, int head, int tail) {
              << endl;
     }
 }
-
