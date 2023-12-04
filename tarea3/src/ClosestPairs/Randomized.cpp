@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdarg>
+#include <iostream>
 #include <random>
 
 using namespace std;
@@ -43,14 +44,26 @@ vector<tuple<Point, Point>> selectRandomPairs(const Grid &grid, int n) {
  * of edges.
  * @return A float representing the size of the subgrid "d"
  */
-float computeSubGridSize(const Grid &grid) {
+float computeSubGridSize(const Grid &grid, long long maxNumberOfGridsAllowed) {
     int n = grid.points.size() / 10;
     float minDistance = numeric_limits<float>::infinity();
-    vector<tuple<Point, Point>> pairs = selectRandomPairs(grid, n);
-    for (auto &[point1, point2] : pairs) {
-        float distance = euclideanDistance(point1, point2);
-        minDistance = min(minDistance, distance);
+
+    while (n > 0) {
+        cout << "n: " << n << endl;
+        vector<tuple<Point, Point>> pairs = selectRandomPairs(grid, n);
+        for (auto &[point1, point2] : pairs) {
+            float distance = euclideanDistance(point1, point2);
+            minDistance = min(minDistance, distance);
+        }
+        int numberOfGrids = pow(ceil(1 / minDistance), 2);
+
+        if (numberOfGrids <= maxNumberOfGridsAllowed) {
+            break;
+        }
+
+        n /= 2;
     }
+
     return minDistance;
 }
 
@@ -64,12 +77,6 @@ int getNumberGrid(Point point, float d) {
     int gridY = ceil(point.y / d);
     int numGrids = ceil(1 / d);
     int numberGrid = (gridY - 1) * numGrids + gridX;
-    // print everything
-    // cout << "gridX: " << gridX << endl;
-    // cout << "gridY: " << gridY << endl;
-    // cout << "numGrids: " << numGrids << endl;
-    // cout << "point: " << point << endl;
-    // cout << "numberGrid: " << numberGrid << endl;
     return numberGrid;
 }
 
@@ -123,7 +130,7 @@ float minDistance1grid(const Grid &grid, float d) {
  * @param n Number of random points to select.
  */
 float closestPairRandomized(const Grid &grid) {
-    float d = computeSubGridSize(grid);
+    float d = computeSubGridSize(grid, 50 * pow(10, 6));
     int numberVerticalGrids = ceil(1 / d);
     int numberTotalGrids = pow(numberVerticalGrids, 2);
 

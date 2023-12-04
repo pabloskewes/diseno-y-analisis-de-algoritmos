@@ -77,10 +77,10 @@ int main() {
     // hash.insert(9, "nine");
     // hash.insert(10, "ten");
 
-    for (int i = 1; i <= 100; i++) {
-        cout << "Experiment #" << i << endl;
-        runRandomizedExperiment(5, 50, i);
-    }
+    // for (int i = 1; i <= 100; i++) {
+    //     cout << "Experiment #" << i << endl;
+    //     runRandomizedExperiment(5, 50, i);
+    // }
 
     // cout << grid << endl;
 
@@ -88,6 +88,8 @@ int main() {
     //     cout << "Experiment #" << i << endl;
     //     runDeterministicExperiment(5, 50, i);
     // }
+
+    runRandomizedExperiment(5, 50, 1);
 
     return 0;
 }
