@@ -36,7 +36,14 @@ int getNumberGrid(Point point, float d) {
     int gridX = ceil(point.x / d);
     int gridY = ceil(point.y / d);
     int numGrids = ceil(1 / d);
-    return (gridX - 1) * numGrids + gridY;
+    int numberGrid = (gridY - 1) * numGrids + gridX;
+    // print everything
+    //cout << "gridX: " << gridX << endl;
+    //cout << "gridY: " << gridY << endl;
+    //cout << "numGrids: " << numGrids << endl;
+    //cout << "point: " << point << endl;
+    //cout << "numberGrid: " << numberGrid << endl;
+    return numberGrid;
 }
 
 /**
@@ -101,14 +108,14 @@ float closestPairRandomized(const Grid &grid, int n) {
     int numberVerticalGrids = ceil(1 / d);
     int numberTotalGrids = pow(numberVerticalGrids, 2);
 
-    //cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
-    //cout << "numberTotalGrids: " << numberTotalGrids << endl;
+    cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
 
     Hashing<Grid> hash;
 
     for (int i = 0; i < numberTotalGrids; i++) {
         hash.insert(i+1, Grid());
     }
+    cout << "numberTotalGrids: " << numberTotalGrids << endl;
     //hash.print();
 
     for (Point point : grid.points) {

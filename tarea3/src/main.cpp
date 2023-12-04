@@ -109,11 +109,15 @@ int main() {
     // cout << "Distance: " << get<2>(closestPair) << endl;
     
     // create grid 
-    Grid grid = generateGrid(5000000);
-    float d = closestPairRandomized(grid, 10000);
-    float d2 = closestPairDivideAndConquer(grid);
+    int t = 25000000;
+    float p = 0.0001;
+    int n = (t * p)/100;
+    Grid grid = generateGrid(t);
+    //float d2 = closestPairDivideAndConquer(grid);
+    //cout << "d2: " << d2 << endl;
+    float d = closestPairRandomized(grid, n);
+    cout << "p: " << p << endl;
     cout << "d: " << d << endl;
-    cout << "d2: " << d2 << endl;
 
     // cout << grid << endl;
 
