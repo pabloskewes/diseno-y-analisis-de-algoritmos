@@ -83,6 +83,17 @@ Grid loadGrid(string filename) {
 }
 
 /**
+ * @brief Copies a grid.
+ * @param grid The grid to copy.
+ * @return A copy of the grid.
+ */
+Grid copyGrid(Grid grid) {
+    Grid copy;
+    copy.points = grid.points;
+    return copy;
+}
+
+/**
  * @brief Prints a grid to stdout.
  * @param grid The grid to print.
  */

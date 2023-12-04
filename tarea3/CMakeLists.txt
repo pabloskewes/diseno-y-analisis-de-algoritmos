@@ -12,9 +12,10 @@ add_executable(
     src/Grid/Grid.cpp
     src/Grid/bulkGeneration.cpp
 
-    src/ClosestPairs/SweepLine.cpp
-    src/ClosestPairs/Randomized.cpp
     src/ClosestPairs/BruteForce.cpp
+    src/ClosestPairs/SweepLine.cpp
+    src/ClosestPairs/DivideAndConquer.cpp
+    src/ClosestPairs/Randomized.cpp
 
     src/Hashing/Hashing.cpp
 )

@@ -12,7 +12,8 @@ using namespace std;
  * @param n Number of points
  * @return long Distance between the closest pair of points
  */
-tuple<Point, Point, float> closestPair(vector<Point> &coordinates, int n);
+tuple<Point, Point, float> closestPairSweepLine(vector<Point> &coordinates,
+                                                int n);
 
 /**
  * @brief Compute the distance between two points using the Sweepline algorithm
@@ -29,6 +30,6 @@ tuple<Point, Point, float> closestPairSweepLine(vector<Point> &coordinates);
  * @param grid Grid of points
  * @return float Distance between the closest pair of points
  */
-tuple<Point, Point, float> closestPairSweepLine(Grid grid);
+tuple<Point, Point, float> closestPairSweepLine(Grid &grid);
 
 #endif

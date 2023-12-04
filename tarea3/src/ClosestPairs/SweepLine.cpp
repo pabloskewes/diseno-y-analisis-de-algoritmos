@@ -12,7 +12,8 @@ using namespace std;
  * @param n Number of points
  * @return long Distance between the closest pair of points
  */
-tuple<Point, Point, float> closestPair(vector<Point> &coordinates, int n) {
+tuple<Point, Point, float> closestPairSweepLine(vector<Point> &coordinates,
+                                                int n) {
     int i;
     // Vector pair to store points on plane
     vector<Point> v;
@@ -62,26 +63,20 @@ tuple<Point, Point, float> closestPair(vector<Point> &coordinates, int n) {
 /**
  * @brief Compute the distance between two points using the Sweepline algorithm
  *
- * @param coordinates Vector of points
- * @return tuple<Point, Point, float> Tuple containing the closest pair of
- * points and the distance between them
- */
-tuple<Point, Point, float> closestPairSweepLine(vector<Point> &coordinates) {
-    int n = coordinates.size();
-    vector<pair<int, int>> v;
-    for (int i = 0; i < n; i++)
-        v.push_back({coordinates[i].x, coordinates[i].y});
-
-    return closestPair(coordinates, n);
-}
-
-/**
- * @brief Compute the distance between two points using the Sweepline algorithm
- *
  * @param grid Grid of points
  * @return tuple<Point, Point, float> Tuple containing the closest pair of
  * points and the distance between them
  */
-tuple<Point, Point, float> closestPairSweepLine(Grid grid) {
-    return closestPairSweepLine(grid.points);
+tuple<Point, Point, float> closestPairSweepLine(vector<Point> &coordinates) {
+    return closestPairSweepLine(coordinates, coordinates.size());
+}
+
+/**
+ * @brief Find the closest pair of points in a grid using brute force
+ *
+ * @param grid Grid of points
+ * @return float Distance between the closest pair of points
+ */
+tuple<Point, Point, float> closestPairSweepLine(Grid &grid) {
+    return closestPairSweepLine(grid.points, grid.points.size());
 }

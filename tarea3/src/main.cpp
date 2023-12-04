@@ -1,10 +1,13 @@
+#include "ClosestPairs/BruteForce.hpp"
+#include "ClosestPairs/SweepLine.hpp"
+#include "ClosestPairs/DivideAndConquer.hpp"
 #include "Grid/Grid.hpp"
 #include "Grid/bulkGeneration.hpp"
 #include "Hashing/Hashing.hpp"
 #include "Hashing/LinkedList.hpp"
-#include "ClosestPairs/BruteForce.hpp"
-#include "ClosestPairs/SweepLine.hpp"
 #include <iostream>
+#include <string>
+#include <tuple>
 
 using namespace std;
 
@@ -33,7 +36,7 @@ int main() {
     // cout << el << endl;
 
     // Generate grids
-    bulkGenerateGrids(gridsBaseDir);
+    // bulkGenerateGrids(gridsBaseDir);
 
     // Load grid
     // for (int i = 5; i <= 50; i += 5) {
@@ -43,6 +46,33 @@ int main() {
     // }
 
     // load grid
-    Grid grid = loadGrid(gridsBaseDir + "50.bin");
+    Grid grid = loadGrid(gridsBaseDir + "test.bin");
+    Grid grid2 = copyGrid(grid);
+    Grid grid3 = copyGrid(grid);
 
+    // Brute force
+    cout << "Brute force" << endl;
+    tuple<Point, Point, float> closestPair = clostestPairBruteForce(grid.points);
+    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
+         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
+         << get<1>(closestPair).y << ")" << endl;
+    cout << "Distance: " << get<2>(closestPair) << endl;
+
+    // Divide and conquer
+    cout << "Divide and conquer" << endl;
+    closestPair = closestPairDivideAndConquer(grid2.points, 0, grid2.points.size());
+    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
+         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
+         << get<1>(closestPair).y << ")" << endl;
+    cout << "Distance: " << get<2>(closestPair) << endl;
+
+    // Sweep line
+    cout << "Sweep line" << endl;
+    closestPair = closestPairSweepLine(grid3.points);
+    cout << "Closest pair: (" << get<0>(closestPair).x << ", "
+         << get<0>(closestPair).y << ") and (" << get<1>(closestPair).x << ", "
+         << get<1>(closestPair).y << ")" << endl;
+    cout << "Distance: " << get<2>(closestPair) << endl;
+
+    return 0;
 }
