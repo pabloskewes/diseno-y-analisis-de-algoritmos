@@ -1,6 +1,7 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -20,6 +21,16 @@ struct Point {
         }
         return x < p.x;
     }
+
+    std::string toString() const {
+        return "Point(x=" + std::to_string(x) + ", y=" + std::to_string(y) +
+               ")";
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Point &p) {
+        os << p.toString();
+        return os;
+    }
 };
 
 /**
@@ -29,6 +40,27 @@ struct Point {
  */
 struct Grid {
     vector<Point> points;
+
+    string toString(int head = 5, int tail = 5) const {
+        string s = "Grid(points=[";
+        int n = points.size();
+        for (int i = 0; i < min(n, head); i++) {
+            s += points[i].toString() + ", ";
+        }
+        if (n > head + tail) {
+            s += "..., ";
+        }
+        for (int i = max(n - tail, head); i < n; i++) {
+            s += points[i].toString() + ", ";
+        }
+        s += "])";
+        return s;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Grid &grid) {
+        os << grid.toString();
+        return os;
+    }
 };
 
 Grid loadGrid(string filename);

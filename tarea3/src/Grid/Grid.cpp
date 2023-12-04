@@ -110,3 +110,4 @@ void printGrid(Grid grid, int head, int tail) {
              << endl;
     }
 }
+
