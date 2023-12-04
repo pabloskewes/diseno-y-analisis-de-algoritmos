@@ -2,6 +2,7 @@
 #include "ClosestPairs/DivideAndConquer.hpp"
 #include "Grid/Grid.hpp"
 #include "Hashing/Hashing.hpp"
+#include "libs/progressbar.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstdarg>
@@ -30,7 +31,7 @@ Grid selectRandomPoints(Grid originalGrid, int n) {
 /**
  * Function to get the respective grid it belongs
  * @param Point A Point struct representing a point in the grid.
- * @param d size of the fracturing grid
+ * @param minDistance size of the fracturing grid
  */
 int getNumberGrid(Point point, float d) {
     int gridX = ceil(point.x / d);
@@ -38,11 +39,11 @@ int getNumberGrid(Point point, float d) {
     int numGrids = ceil(1 / d);
     int numberGrid = (gridY - 1) * numGrids + gridX;
     // print everything
-    //cout << "gridX: " << gridX << endl;
-    //cout << "gridY: " << gridY << endl;
-    //cout << "numGrids: " << numGrids << endl;
-    //cout << "point: " << point << endl;
-    //cout << "numberGrid: " << numberGrid << endl;
+    // cout << "gridX: " << gridX << endl;
+    // cout << "gridY: " << gridY << endl;
+    // cout << "numGrids: " << numGrids << endl;
+    // cout << "point: " << point << endl;
+    // cout << "numberGrid: " << numberGrid << endl;
     return numberGrid;
 }
 
@@ -50,11 +51,11 @@ int getNumberGrid(Point point, float d) {
  * Function to get the minimun distances between every point from 2 grid
  * @param grid1 first grid
  * @param grid2 second grid
- * @param d size of the potencial minimun distance
+ * @param minDistance size of the potencial minimun distance
  */
 float minDistance2grids(const Grid &grid1, const Grid &grid2, float d) {
     float minDistance = d;
-    for (int i = 0; i < grid1.points.size(); i++) {
+    for (int i = 0; i < grid1.points.size(); i++) { // O(n1 * n2)
         for (int j = 0; j < grid2.points.size(); j++) {
             float distance =
                 euclideanDistance(grid1.points[i], grid2.points[j]);
@@ -69,7 +70,7 @@ float minDistance2grids(const Grid &grid1, const Grid &grid2, float d) {
 /**
  * Function to get the minimun distances between every point from 1 grid
  * @param grid1 first grid
- * @param d size of the potencial minimun distance
+ * @param minDistance size of the potencial minimun distance
  */
 float minDistance1grid(const Grid &grid, float d) {
     float minDistance = d;
@@ -100,12 +101,12 @@ float closestPairRandomized(const Grid &grid, int n) {
     Grid selectedGrid = selectRandomPoints(grid, n);
 
     // Calculate the potential d
-    float d = closestPairDivideAndConquer(selectedGrid);
+    float minDistance = closestPairDivideAndConquer(selectedGrid);
 
-    cout << "d: " << d << endl;
+    cout << "d: " << minDistance << endl;
 
     // Divide the grid in d*d grids
-    int numberVerticalGrids = ceil(1 / d);
+    int numberVerticalGrids = ceil(1 / minDistance);
     int numberTotalGrids = pow(numberVerticalGrids, 2);
 
     cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
@@ -113,56 +114,62 @@ float closestPairRandomized(const Grid &grid, int n) {
     Hashing<Grid> hash;
 
     for (int i = 0; i < numberTotalGrids; i++) {
-        hash.insert(i+1, Grid());
+        hash.insert(i + 1, Grid());
     }
     cout << "numberTotalGrids: " << numberTotalGrids << endl;
-    //hash.print();
 
     for (Point point : grid.points) {
-        int gridNumber = getNumberGrid(point, d);
+        int gridNumber = getNumberGrid(point, minDistance);
         Grid &gridOnHash = hash.get(gridNumber);
         gridOnHash.points.push_back(point);
     }
 
+    hash.printValueCountsStats();
+    // cout << "percentage of empty grids: " << hash.getPercentageOfEmptyBuckets()
+    //      << endl;
     // hash.printStats();
 
-    for (int i = 1; i < numberTotalGrids; i++) {
+    progressbar bar(numberTotalGrids);
+
+    for (int i = 1; i < numberTotalGrids; i++) { // O(numberTotalGrids +
         if (i > (numberTotalGrids - numberVerticalGrids)) {
             // probamos con su misma grilla y con la de al lado
             Grid &ownGrid = hash.get(i);
             Grid &leftGrid = hash.get(i + 1);
-            d = minDistance2grids(ownGrid, leftGrid, d);
-            d = minDistance1grid(ownGrid, d);
+            minDistance = minDistance2grids(ownGrid, leftGrid, minDistance);
+            minDistance = minDistance1grid(ownGrid, minDistance);
         } else if (i % numberVerticalGrids == 0) {
             // probamos con su misma grilla y con la de arriba y arriba -1
             Grid &ownGrid = hash.get(i);
             Grid &upGrid = hash.get(i + numberVerticalGrids);
             Grid &upLeftGrid = hash.get(i + numberVerticalGrids - 1);
-            d = minDistance2grids(ownGrid, upGrid, d);
-            d = minDistance2grids(ownGrid, upLeftGrid, d);
-            d = minDistance1grid(ownGrid, d);
+            minDistance = minDistance2grids(ownGrid, upGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, upLeftGrid, minDistance);
+            minDistance = minDistance1grid(ownGrid, minDistance);
         } else if (i % numberVerticalGrids == 1) {
             Grid &ownGrid = hash.get(i);
             Grid &upGrid = hash.get(i + numberVerticalGrids);
             Grid &upRightGrid = hash.get(i + numberVerticalGrids + 1);
             Grid &leftGrid = hash.get(i + 1);
-            d = minDistance2grids(ownGrid, upGrid, d);
-            d = minDistance2grids(ownGrid, upRightGrid, d);
-            d = minDistance2grids(ownGrid, leftGrid, d);
-            d = minDistance1grid(ownGrid, d);
+            minDistance = minDistance2grids(ownGrid, upGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, upRightGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, leftGrid, minDistance);
+            minDistance = minDistance1grid(ownGrid, minDistance);
         } else {
             Grid &ownGrid = hash.get(i);
             Grid &upGrid = hash.get(i + numberVerticalGrids);
             Grid &upLeftGrid = hash.get(i + numberVerticalGrids - 1);
             Grid &upRightGrid = hash.get(i + numberVerticalGrids + 1);
             Grid &leftGrid = hash.get(i + 1);
-            d = minDistance2grids(ownGrid, upGrid, d);
-            d = minDistance2grids(ownGrid, upLeftGrid, d);
-            d = minDistance2grids(ownGrid, upRightGrid, d);
-            d = minDistance2grids(ownGrid, leftGrid, d);
-            d = minDistance1grid(ownGrid, d);
+            minDistance = minDistance2grids(ownGrid, upGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, upLeftGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, upRightGrid, minDistance);
+            minDistance = minDistance2grids(ownGrid, leftGrid, minDistance);
+            minDistance = minDistance1grid(ownGrid, minDistance);
         }
+
+        bar.update();
     }
 
-    return d;
+    return minDistance;
 }
