@@ -69,6 +69,16 @@ template <typename T> struct Hashing {
     }
 
     /**
+     * @brief      Returns true if the given key is in the hash table.
+     * @param[in]  key   The key
+     * @return     True if the given key is in the hash table, False otherwise.
+     */
+    bool contains(int key) {
+        long long index = hash(key);
+        return !buckets[index].empty();
+    }
+
+    /**
      * @brief      Prints the hash table.
      */
     void print() {

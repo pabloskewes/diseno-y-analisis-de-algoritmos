@@ -111,6 +111,14 @@ float minDistance1grid(const Grid &grid, float d) {
     return minDistance;
 }
 
+Grid *getGrid(int key, Hashing<Grid *> &hash) {
+    if (hash.contains(key)) {
+        return hash.get(key);
+    }
+    Grid *grid = new Grid();
+    return grid;
+}
+
 /**
  * Final function that using random points, it returns a potencion d, then
  * it divides the grid in d*d grids, later on we save every point using a
@@ -130,17 +138,23 @@ float closestPairRandomized(const Grid &grid) {
     cout << "d: " << d << endl;
     cout << "numberTotalGrids: " << numberTotalGrids << endl;
 
-    vector<Grid> grids(numberTotalGrids);
-    Hashing<Grid *> hash(numberTotalGrids);
-
-    for (long long i = 0; i < numberTotalGrids; i++) {
-        hash.insert(i + 1, &grids[i]);
-    }
+    vector<Grid> grids;
+    Hashing<Grid *> hash(grid.points.size());
 
     for (Point point : grid.points) {
         int gridNumber = getNumberGrid(point, d);
-        Grid *gridOnHash = hash.get(gridNumber);
-        gridOnHash->points.push_back(point);
+        if (hash.contains(gridNumber)) {
+            cout << "gridNumber already exists" << endl;
+            cout << "gridNumber: " << gridNumber << endl;
+            Grid *gridOnHash = hash.get(gridNumber);
+            cout << "gridOnHash: " << gridOnHash << endl;
+            gridOnHash->points.push_back(point);
+            continue;
+        }
+        cout << "new gridNumber: " << gridNumber << endl;
+        Grid grid(vector<Point>{point});
+        grids.push_back(grid);
+        hash.insert(gridNumber, &grids.back());
     }
 
     hash.printValueCountsStats();
@@ -153,34 +167,34 @@ float closestPairRandomized(const Grid &grid) {
     for (int i = 1; i < numberTotalGrids; i++) {
         if (i > (numberTotalGrids - numberVerticalGrids)) {
             // probamos con su misma grilla y con la de al lado
-            Grid *ownGrid = hash.get(i);
-            Grid *leftGrid = hash.get(i + 1);
+            Grid *ownGrid = getGrid(i, hash);
+            Grid *leftGrid = getGrid(i + 1, hash);
             minDistance = minDistance2grids(*ownGrid, *leftGrid, minDistance);
             minDistance = minDistance1grid(*ownGrid, minDistance);
         } else if (i % numberVerticalGrids == 0) {
             // probamos con su misma grilla y con la de arriba y arriba -1
-            Grid *ownGrid = hash.get(i);
-            Grid *upGrid = hash.get(i + numberVerticalGrids);
-            Grid *upLeftGrid = hash.get(i + numberVerticalGrids - 1);
+            Grid *ownGrid = getGrid(i, hash);
+            Grid *upGrid = getGrid(i + numberVerticalGrids, hash);
+            Grid *upLeftGrid = getGrid(i + numberVerticalGrids - 1, hash);
             minDistance = minDistance2grids(*ownGrid, *upGrid, minDistance);
             minDistance = minDistance2grids(*ownGrid, *upLeftGrid, minDistance);
             minDistance = minDistance1grid(*ownGrid, minDistance);
         } else if (i % numberVerticalGrids == 1) {
-            Grid *ownGrid = hash.get(i);
-            Grid *upGrid = hash.get(i + numberVerticalGrids);
-            Grid *upRightGrid = hash.get(i + numberVerticalGrids + 1);
-            Grid *leftGrid = hash.get(i + 1);
+            Grid *ownGrid = getGrid(i, hash);
+            Grid *upGrid = getGrid(i + numberVerticalGrids, hash);
+            Grid *upRightGrid = getGrid(i + numberVerticalGrids + 1, hash);
+            Grid *leftGrid = getGrid(i + 1, hash);
             minDistance = minDistance2grids(*ownGrid, *upGrid, minDistance);
             minDistance =
                 minDistance2grids(*ownGrid, *upRightGrid, minDistance);
             minDistance = minDistance2grids(*ownGrid, *leftGrid, minDistance);
             minDistance = minDistance1grid(*ownGrid, minDistance);
         } else {
-            Grid *ownGrid = hash.get(i);
-            Grid *upGrid = hash.get(i + numberVerticalGrids);
-            Grid *upLeftGrid = hash.get(i + numberVerticalGrids - 1);
-            Grid *upRightGrid = hash.get(i + numberVerticalGrids + 1);
-            Grid *leftGrid = hash.get(i + 1);
+            Grid *ownGrid = getGrid(i, hash);
+            Grid *upGrid = getGrid(i + numberVerticalGrids, hash);
+            Grid *upLeftGrid = getGrid(i + numberVerticalGrids - 1, hash);
+            Grid *upRightGrid = getGrid(i + numberVerticalGrids + 1, hash);
+            Grid *leftGrid = getGrid(i + 1, hash);
             minDistance = minDistance2grids(*ownGrid, *upGrid, minDistance);
             minDistance = minDistance2grids(*ownGrid, *upLeftGrid, minDistance);
             minDistance =
