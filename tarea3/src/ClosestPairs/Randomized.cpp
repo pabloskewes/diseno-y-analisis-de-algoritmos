@@ -2,12 +2,17 @@
 #include "ClosestPairs/Randomized.hpp"
 #include "Grid/Grid.hpp"
 #include "Hashing/Hashing.hpp"
-#include "ClosestPairs/SweepLine.cpp"
+#include "ClosestPairs/DivideConquer.cpp"
+#include "../../include/ClosestPairs/DivideConquer.hpp"
 #include <algorithm>
 #include <random>
 
 
 using namespace std;
+
+float distanceSquare(Point p1, Point p2) {
+    return (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y);
+}
 
 /*
 * Function to select n random points from the grid
@@ -113,6 +118,8 @@ float minDistance1grid(const Grid& grid, float d) {
 }
 
 
+
+
 /*
 * Final function that using random points, it returns a potencion d, then it divides the grid in d*d grids, 
 * later on we save every point using a hash function, finally we go through every grid and we check if there is a point that is closer than the potencial d
@@ -120,23 +127,25 @@ float minDistance1grid(const Grid& grid, float d) {
 * @param hashFunction A hash function that saves the points in a hash table.
 * @param n Number of random points to select.
 */
-float closestPairRandomized(const Grid& grid, Hash hashFunction, int n) {
+float closestPairRandomized(const Grid& grid, int n) {
     // Select n random points from the grid
     Grid selectedGrid = selectRandomPoints2(grid, n);
 
     // Calculate the potential d
-    float d = sweepLine(selectedGrid);
+    float d = closestPair(selectedGrid);
 
     // Divide the grid in d*d grids
     int numberVerticalGrids = (1 / d) + 1;
     int numberTotalGrids = numberVerticalGrids * numberVerticalGrids;
 
     // Going through every point and saving it in a hash table
+     Hashing<Point> hash;
+
     for (int i = 0; i < selectedGrid.points.size(); i++) {
         Point point = selectedGrid.points[i];
         int gridNumber = getNumberGrid(point, d);
         //*use the hashfunction to save the point in the hash table
-        //hashFunction.insert(gridNumber, point);
+        hash.insert(gridNumber, point);
     }
     
     

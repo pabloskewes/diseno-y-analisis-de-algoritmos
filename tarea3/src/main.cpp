@@ -12,6 +12,22 @@ string gridsBaseDir = "data/grids/";
 int main() {
     cout << "Hello, World!" << endl;
 
+    Point p1 = {1, 2};
+    Point p2 = {3, 4};
+    Point p3 = {5, 6};
+    Point p4 = {7, 8};
+
+    Hashing<Point> hash1;
+    hash1.insert(1, p1);
+    hash1.insert(2, p2);
+    hash1.insert(1, p3);
+    hash1.insert(2, p4);
+
+    hash1.print();
+    hash.printStats();
+    Point el = hash.get(1);
+    cout << el << endl;
+
     Hashing<string> hash;
     hash.insert(1, "one");
     hash.insert(2, "two");
