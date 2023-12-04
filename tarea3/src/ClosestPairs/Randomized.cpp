@@ -128,19 +128,14 @@ float closestPairRandomized(const Grid &grid) {
     int numberTotalGrids = pow(numberVerticalGrids, 2);
 
     cout << "d: " << d << endl;
-    cout << "numberVerticalGrids: " << numberVerticalGrids << endl;
     cout << "numberTotalGrids: " << numberTotalGrids << endl;
 
     vector<Grid> grids(numberTotalGrids);
     Hashing<Grid *> hash(numberTotalGrids);
 
-    hash.printStats();
-
     for (long long i = 0; i < numberTotalGrids; i++) {
         hash.insert(i + 1, &grids[i]);
     }
-
-    cout << "hash.size: " << hash.size << endl;
 
     for (Point point : grid.points) {
         int gridNumber = getNumberGrid(point, d);
