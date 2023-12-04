@@ -11,7 +11,7 @@ build/
 bin/
 
 # Data
-data/grids/
+data/grids/*.bin
 
 # python venv
 report/venv/
