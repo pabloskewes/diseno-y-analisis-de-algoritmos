@@ -5,6 +5,6 @@
 
 using namespace std;
 
-float closestPairRandomized(const Grid &grid, int n);
+float closestPairRandomized(const Grid &grid);
 
 #endif // RANDOMIZED_HPP

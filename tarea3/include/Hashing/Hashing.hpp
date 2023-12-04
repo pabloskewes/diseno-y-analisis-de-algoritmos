@@ -2,6 +2,7 @@
 #define HASHING_HPP
 
 #include "Hashing/LinkedList.hpp"
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -34,10 +35,11 @@ template <typename T> struct Hashing {
     /**
      * @brief      Constructs the object.
      */
-    Hashing() : gen(rd()) {
+    Hashing(long long m) {
+        gen = mt19937(rd());
         size = 0;
-        m = 100000;
-        p = 1000000009;
+        p = 1000000007;
+        this->m = m;
         a = uniform_int_distribution<long long>(1, p - 1)(gen);
         b = uniform_int_distribution<long long>(0, p - 1)(gen);
         buckets.resize(m);
@@ -61,7 +63,7 @@ template <typename T> struct Hashing {
      *
      * @return     A reference to the value associated with the given key.
      */
-    T& get(int key) {
+    T &get(int key) {
         long long index = hash(key);
         return buckets[index].get(key);
     }
@@ -87,6 +89,78 @@ template <typename T> struct Hashing {
         cout << "p = " << p << endl;
         cout << "a = " << a << endl;
         cout << "b = " << b << endl;
+    }
+
+    /**
+     * @brief      Gets the value counts in the hash table.
+     * @return     The value counts.
+     */
+    vector<int> getValueCounts() {
+        vector<int> valueCounts;
+        for (int i = 0; i < m; i++) {
+            if (buckets[i].empty()) {
+                continue;
+            }
+            valueCounts.push_back(buckets[i].size);
+        }
+        return valueCounts;
+    }
+
+    /**
+     * @brief      Gets stats on the value counts in the hash table:
+     *             count, min, max, mean, median, quartiles, etc.
+     * @return     The value counts stats.
+     */
+    vector<float> getValueCountsStats() {
+        vector<int> valueCounts = getValueCounts();
+        vector<float> valueCountsStats;
+        int n = valueCounts.size();
+        if (n == 0) {
+            return valueCountsStats;
+        }
+        sort(valueCounts.begin(), valueCounts.end());
+        valueCountsStats.push_back(n);
+        valueCountsStats.push_back(valueCounts[0]);
+        valueCountsStats.push_back(valueCounts[n - 1]);
+        float sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += valueCounts[i];
+        }
+        valueCountsStats.push_back(sum / n);
+        valueCountsStats.push_back(valueCounts[n / 2]);
+        valueCountsStats.push_back(valueCounts[n / 4]);
+        valueCountsStats.push_back(valueCounts[3 * n / 4]);
+        return valueCountsStats;
+    }
+
+    void printValueCountsStats() {
+        vector<float> valueCountsStats = getValueCountsStats();
+        int n = valueCountsStats.size();
+        if (n == 0) {
+            return;
+        }
+        cout << "Value counts stats:" << endl;
+        cout << "size: " << valueCountsStats[0] << endl;
+        cout << "mean: " << valueCountsStats[3] << endl;
+        cout << "min: " << valueCountsStats[1] << endl;
+        cout << "first quartile: " << valueCountsStats[5] << endl;
+        cout << "median: " << valueCountsStats[4] << endl;
+        cout << "third quartile: " << valueCountsStats[6] << endl;
+        cout << "max: " << valueCountsStats[2] << endl;
+    }
+
+    /**
+     * @brief      Gets the perteage of buckets that are empty.
+     * @return     The percentage of empty buckets.
+     */
+    float getPercentageOfEmptyBuckets() {
+        int emptyBuckets = 0;
+        for (int i = 0; i < m; i++) {
+            if (buckets[i].empty()) {
+                emptyBuckets++;
+            }
+        }
+        return (float)emptyBuckets / m;
     }
 
   private:

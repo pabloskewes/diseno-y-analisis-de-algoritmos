@@ -12,6 +12,7 @@ bin/
 
 # Data
 data/grids/*.bin
+data/results/*.csv
 
 # python venv
 report/venv/
