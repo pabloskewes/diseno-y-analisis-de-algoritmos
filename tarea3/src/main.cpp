@@ -9,7 +9,7 @@ using namespace std;
 string gridsBaseDir = "data/grids/";
 
 int main() {
-    cout << "Hello, World!" << endl;
+    cout << "Hello, World!!!" << endl;
 
     Hashing<string> hash;
     hash.insert(1, "one");
