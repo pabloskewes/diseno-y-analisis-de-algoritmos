@@ -14,6 +14,7 @@ add_executable(
 
     src/ClosestPairs/SweepLine.cpp
     src/ClosestPairs/Randomized.cpp
+    src/ClosestPairs/BruteForce.cpp
 
     src/Hashing/Hashing.cpp
 )
