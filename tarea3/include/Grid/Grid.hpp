@@ -41,6 +41,13 @@ struct Point {
 struct Grid {
     vector<Point> points;
 
+    Grid() {
+    }
+
+    Grid(vector<Point> points) {
+        this->points = points;
+    }
+
     string toString(int head = 5, int tail = 5) const {
         string s = "Grid(points=[";
         int n = points.size();
