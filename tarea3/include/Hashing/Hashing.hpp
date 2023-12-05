@@ -38,7 +38,7 @@ template <typename T> struct Hashing {
     Hashing(long long m) {
         gen = mt19937(rd());
         size = 0;
-        p = 1000000007;
+        p = pow(2, 61) - 1;
         this->m = m;
         a = uniform_int_distribution<long long>(1, p - 1)(gen);
         b = uniform_int_distribution<long long>(0, p - 1)(gen);
