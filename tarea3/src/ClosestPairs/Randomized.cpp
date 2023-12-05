@@ -141,7 +141,6 @@ float closestPairRandomized(const Grid &grid) {
     // cout << "numberTotalGrids: " << numberTotalGrids << endl;
 
     vector<Grid> grids(numberTotalGrids);
-    // cout << "grids size: " << grids.size() << endl;
     Hashing<Grid *> hash(pow(2, 28));
     // hash.printStats();
     for (long long i = 0; i < numberTotalGrids; i++) {

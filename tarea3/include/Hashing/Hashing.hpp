@@ -47,8 +47,6 @@ template <typename T> struct Hashing {
         // cout << "a: " << a << endl;
     }
 
-
-
     /**
      * @brief      Inserts a key-value pair into the hash table.
      *
@@ -175,30 +173,14 @@ template <typename T> struct Hashing {
      * @param[in]  x     The value to hash.
      * @return     Hashed value.
      */
+    // long long hash(long long x) {
+    //     return (((a * x) + b) % p) % m;
+    // }
+
     long long hash(long long x) {
-        // cout << "x: " << x << endl;
-        // cout << "a * x: " << a * x << endl;
-        // cout << "a * x + b: " << a * x + b << endl;
-        // cout << "(a * x + b) % p: " << (a * x + b) % p << endl;
-        // long long res = (((a * x) + b) % p) % m;
-        // cout << "res: " << res << endl;
-        return (((a * x) + b) % p) % m;
+        int k = 31;
+        return ((x & p) + (x >> k)) % m;
     }
-
-    // long long defaultHashFunction(int x) {
-    //     ((a * x + b) % p) % m;
-    // }
-
-    // long long mercenePrimeHashFunction(int x) {
-    //     int k = 64;
-    //     return ((x & ((1 << k) - 1)) + (x >> k)) % m;
-    // }
-
-    // long long pow2HashFunction(int x) {
-    //     int k = 64;
-    //     int l = 32;
-    //     return (((a * x + b) & ((1 << k) - 1))) >> l;
-    // }
 };
 
 #endif // HASHING_HPP
