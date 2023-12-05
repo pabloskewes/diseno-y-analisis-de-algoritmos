@@ -48,7 +48,6 @@ float computeSubGridSize(const Grid &grid, long long maxNumberOfGridsAllowed) {
     int n = grid.points.size() / 10;
 
     while (n > 0) {
-        cout << "n: " << n << endl;
         vector<tuple<Point, Point>> pairs = selectRandomPairs(grid, n);
 
         float minDistance = numeric_limits<float>::infinity();
