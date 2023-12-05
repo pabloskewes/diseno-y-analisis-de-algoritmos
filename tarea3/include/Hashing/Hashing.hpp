@@ -172,6 +172,21 @@ template <typename T> struct Hashing {
     long long hash(int x) {
         return ((a * x + b) % p) % m;
     }
+
+    // long long defaultHashFunction(int x) {
+    //     ((a * x + b) % p) % m;
+    // }
+
+    // long long mercenePrimeHashFunction(int x) {
+    //     int k = 64;
+    //     return ((x & ((1 << k) - 1)) + (x >> k)) % m;
+    // }
+
+    // long long pow2HashFunction(int x) {
+    //     int k = 64;
+    //     int l = 32;
+    //     return (((a * x + b) & ((1 << k) - 1))) >> l;
+    // }
 };
 
 #endif // HASHING_HPP

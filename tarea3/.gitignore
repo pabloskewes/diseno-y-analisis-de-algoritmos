@@ -12,7 +12,8 @@ bin/
 
 # Data
 data/grids/*.bin
-data/results/*.csv
+data/results/divideAndConquer/*.csv
+data/results/randomized/*.csv
 
 # python venv
 report/venv/
