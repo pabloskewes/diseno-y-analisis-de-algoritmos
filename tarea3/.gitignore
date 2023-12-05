@@ -15,7 +15,7 @@ data/grids/*.bin
 data/results/*.csv
 data/results/randomized/*.csv
 data/results/divideAndConquer/*.csv
-
+data/results/HashingFunction/*.csv
 
 # python venv
 report/venv/

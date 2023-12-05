@@ -54,7 +54,7 @@ void runRandomizedExperiment(int from, int to, int experimentNumber) {
 
         cout << "Randomized: " << duration.count() << " microseconds" << endl;
 
-        string outputFilename = "data/results/randomized/n_" + to_string(i) +
+        string outputFilename = "data/results/HashingFunction/n_" + to_string(i) +
                                 "exp_" + to_string(experimentNumber) + ".csv";
         ofstream outputFile(outputFilename, ios::out | ios::app);
         outputFile << i << "," << duration.count() << endl;
@@ -64,38 +64,23 @@ void runRandomizedExperiment(int from, int to, int experimentNumber) {
 
 int main() {
     cout << "Hello, World!!!" << endl;
-
-    // Hashing<string> hash;
-    // hash.insert(1, "one");
-    // hash.insert(2, "two");
-    // hash.insert(3, "three");
-    // hash.insert(4, "four");
-    // hash.insert(5, "five");
-    // hash.insert(6, "six");
-    // hash.insert(7, "seven");
-    // hash.insert(8, "eight");
-    // hash.insert(9, "nine");
-    // hash.insert(10, "ten");
-
+    
+    // iteracion para crear los experimentos de los algoritmos
     // for (int i = 1; i <= 100; i++) {
     //     cout << "Experiment #" << i << endl;
     //     runRandomizedExperiment(5, 50, i);
+    //     runDeterministicExperiment(5, 50, i);
     // }
+    // con la funcion bulkGenerateGrids se pueden generar las grillas de prueba
+    // Grid grid = loadGrid("data/grids/5.bin"); // con esta función se puede cargar una grilla desde un archivo binario
 
-    // cout << grid << endl;
-
-    for (int i = 105; i <= 200; i++) {
-        cout << "Experiment #" << i << endl;
-        runRandomizedExperiment(5, 50, i);
-    }
-    // Grid grid = loadGrid("data/grids/25.bin");
-
-    // float d2 = closestPairRandomized(grid);
-    // cout << "d2: " << d2 << endl;
+    Grid grid = generateGrid(5000); // con esta función se puede crear una grilla temporal con la cual probar los algoritmos
+    float d_random = closestPairRandomized(grid);
+    cout << "d_random: " << d_random << endl;
 
 
-    // float d = closestPairDivideAndConquer(grid);
-    // cout << "d1: " << d << endl;
+    float d_det = closestPairDivideAndConquer(grid);
+    cout << "d_det: " << d_det << endl;
 
 
     return 0;
