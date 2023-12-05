@@ -84,12 +84,19 @@ int main() {
 
     // cout << grid << endl;
 
-    // for (int i = 1; i <= 100; i++) {
-    //     cout << "Experiment #" << i << endl;
-    //     runDeterministicExperiment(5, 50, i);
-    // }
+    for (int i = 105; i <= 200; i++) {
+        cout << "Experiment #" << i << endl;
+        runRandomizedExperiment(5, 50, i);
+    }
+    // Grid grid = loadGrid("data/grids/25.bin");
 
-    runRandomizedExperiment(5, 50, 1);
+    // float d2 = closestPairRandomized(grid);
+    // cout << "d2: " << d2 << endl;
+
+
+    // float d = closestPairDivideAndConquer(grid);
+    // cout << "d1: " << d << endl;
+
 
     return 0;
 }

@@ -38,12 +38,16 @@ template <typename T> struct Hashing {
     Hashing(long long m) {
         gen = mt19937(rd());
         size = 0;
-        p = pow(2, 61) - 1;
+        p = pow(2, 31) - 1;
         this->m = m;
         a = uniform_int_distribution<long long>(1, p - 1)(gen);
         b = uniform_int_distribution<long long>(0, p - 1)(gen);
+        // cout << "b: " << b << endl;
         buckets.resize(m);
+        // cout << "a: " << a << endl;
     }
+
+
 
     /**
      * @brief      Inserts a key-value pair into the hash table.
@@ -51,8 +55,10 @@ template <typename T> struct Hashing {
      * @param[in]  key    The key
      * @param[in]  value  The value
      */
-    void insert(int key, const T &value) {
+    void insert(long long key, const T &value) {
+        // cout << "key: " << key << endl;
         long long index = hash(key);
+        // cout << "index: " << index << endl;
         buckets[index].push_back(value, key);
     }
 
@@ -63,7 +69,7 @@ template <typename T> struct Hashing {
      *
      * @return     A reference to the value associated with the given key.
      */
-    T &get(int key) {
+    T &get(long long key) {
         long long index = hash(key);
         return buckets[index].get(key);
     }
@@ -169,8 +175,14 @@ template <typename T> struct Hashing {
      * @param[in]  x     The value to hash.
      * @return     Hashed value.
      */
-    long long hash(int x) {
-        return ((a * x + b) % p) % m;
+    long long hash(long long x) {
+        // cout << "x: " << x << endl;
+        // cout << "a * x: " << a * x << endl;
+        // cout << "a * x + b: " << a * x + b << endl;
+        // cout << "(a * x + b) % p: " << (a * x + b) % p << endl;
+        // long long res = (((a * x) + b) % p) % m;
+        // cout << "res: " << res << endl;
+        return (((a * x) + b) % p) % m;
     }
 
     // long long defaultHashFunction(int x) {
