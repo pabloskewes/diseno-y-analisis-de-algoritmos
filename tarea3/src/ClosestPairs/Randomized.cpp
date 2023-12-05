@@ -56,15 +56,17 @@ float computeSubGridSize(const Grid &grid, long long maxNumberOfGridsAllowed) {
             minDistance = min(minDistance, distance);
         }
         int numberOfGrids = pow(ceil(1 / minDistance), 2);
-
+        cout << "number of grids: " << numberOfGrids << endl;
+        cout << "max number of grids allowed: " << maxNumberOfGridsAllowed
+             << endl;
         if (numberOfGrids <= maxNumberOfGridsAllowed) {
-            break;
+            return minDistance;
         }
 
         n /= 2;
     }
 
-    return 1 / sqrt(n);
+    return 0.002;
 }
 
 /**
@@ -131,29 +133,33 @@ float minDistance1grid(const Grid &grid, float d) {
  */
 float closestPairRandomized(const Grid &grid) {
     float d = computeSubGridSize(grid, 50 * pow(10, 6));
-    int numberVerticalGrids = ceil(1 / d);
-    int numberTotalGrids = pow(numberVerticalGrids, 2);
+    long long numberVerticalGrids = ceil(1 / d);
+    long long numberTotalGrids = pow(numberVerticalGrids, 2);
 
-    cout << "d: " << d << endl;
-    cout << "numberTotalGrids: " << numberTotalGrids << endl;
+    // cout << "d: " << d << endl;
+    // cout << "numberTotalGrids: " << numberTotalGrids << endl;
 
     vector<Grid> grids(numberTotalGrids);
-    Hashing<Grid *> hash(numberTotalGrids);
-
+    // cout << "grids size: " << grids.size() << endl;
+    Hashing<Grid *> hash(pow(2, 28));
+    // hash.printStats();
     for (long long i = 0; i < numberTotalGrids; i++) {
+        // cout << "i: " << i << endl;
         hash.insert(i + 1, &grids[i]);
     }
+    // hash.printValueCountsStats();
 
     for (Point point : grid.points) {
+        // cout << "point: " << point << endl;
         int gridNumber = getNumberGrid(point, d);
         Grid *gridOnHash = hash.get(gridNumber);
         gridOnHash->points.push_back(point);
     }
 
-    hash.printValueCountsStats();
+    // hash.printValueCountsStats();
     cout << "percentage of empty grids: " << hash.getPercentageOfEmptyBuckets()
          << endl;
-    hash.printStats();
+    // hash.printStats();
 
     float minDistance = d;
 
