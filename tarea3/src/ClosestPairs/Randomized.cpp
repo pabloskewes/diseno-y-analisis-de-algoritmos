@@ -46,11 +46,12 @@ vector<tuple<Point, Point>> selectRandomPairs(const Grid &grid, int n) {
  */
 float computeSubGridSize(const Grid &grid, long long maxNumberOfGridsAllowed) {
     int n = grid.points.size() / 10;
-    float minDistance = numeric_limits<float>::infinity();
 
     while (n > 0) {
         cout << "n: " << n << endl;
         vector<tuple<Point, Point>> pairs = selectRandomPairs(grid, n);
+
+        float minDistance = numeric_limits<float>::infinity();
         for (auto &[point1, point2] : pairs) {
             float distance = euclideanDistance(point1, point2);
             minDistance = min(minDistance, distance);
@@ -64,7 +65,7 @@ float computeSubGridSize(const Grid &grid, long long maxNumberOfGridsAllowed) {
         n /= 2;
     }
 
-    return minDistance;
+    return 1 / sqrt(n);
 }
 
 /**
